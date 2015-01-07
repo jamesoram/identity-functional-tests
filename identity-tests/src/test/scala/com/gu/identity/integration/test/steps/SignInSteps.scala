@@ -5,7 +5,6 @@ import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, Si
 import com.gu.identity.integration.test.util.User
 import com.gu.integration.test.steps.BaseSteps
 import com.gu.integration.test.util.CookieUtil._
-import com.gu.integration.test.util.PageLoader._
 import com.gu.integration.test.util.UserConfig._
 import org.openqa.selenium.{Cookie, WebDriver}
 import org.scalatest.Matchers
@@ -17,7 +16,6 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
   private val LoginCookie: String = "GU_U"
   private val SecureLoginCookie: String = "SC_GU_U"
   private val SocialMediaCookieMI: String = "GU_MI"
-  private val SocialMediaCookieME: String = "GU_ME"
 
   def clickSignInLink(): SignInPage = {
     logger.step("Clicking sign in link")
@@ -80,9 +78,6 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     logger.step(s"Checking that user is logged in through Social Media")
     val loginCookieMI = getCookie(SocialMediaCookieMI)
     loginCookieMI.getValue should not be empty
-
-    val loginCookieME = getCookie(SocialMediaCookieME)
-    loginCookieME.getValue should not be empty
   }
 
   def signOut(pageWithSignInModule: ContainerWithSigninModulePage) = {
