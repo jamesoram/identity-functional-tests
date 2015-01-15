@@ -13,6 +13,7 @@ class SignInModule(implicit driver: WebDriver) extends ParentPage {
   def signInName: WebElement = findByTestAttribute("sign-in-name")
 
   def clickSignInLink(): SignInPage = {
+    new Actions(driver).moveToElement(signInLink).perform()
     signInLink.click()
     new SignInPage()
   }
