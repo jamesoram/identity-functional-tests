@@ -1,10 +1,11 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.EditAccountDetailsModule
+import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, EditAccountDetailsModule}
 import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
 import com.gu.identity.integration.test.util.User
 import com.gu.identity.integration.test.util.User._
+import com.gu.integration.test.steps.BaseSteps
 import com.gu.integration.test.util.UserConfig._
 import org.openqa.selenium.WebDriver
 import org.scalatest.EitherValues
@@ -77,15 +78,14 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       SignInSteps().checkUserIsLoggedIn(userBeforeChange.userName)
     }
 
-    // this has to be disabled until social sign in on code is made public
-//    scenarioWeb("should be able to reset password") { implicit driver: WebDriver =>
-//      BaseSteps().goToStartPage()
-//      SignInSteps().signInUsingFaceBook()
-//      UserSteps().requestToResetPassword(new ContainerWithSigninModulePage())
-//
-//      val resetPwdPage = UserSteps().checkResetPasswordMailAndGoToResetPwdPage()
-//
-//      UserSteps().resetPassword(resetPwdPage)
-//    }
+    scenarioWeb("should be able to reset password") { implicit driver: WebDriver =>
+      BaseSteps().goToStartPage()
+      SignInSteps().signInUsingFaceBook()
+      UserSteps().requestToResetPassword(new ContainerWithSigninModulePage())
+
+      val resetPwdPage = UserSteps().checkResetPasswordMailAndGoToResetPwdPage()
+
+      UserSteps().resetPassword(resetPwdPage)
+    }
   }
 }
