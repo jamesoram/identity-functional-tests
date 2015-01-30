@@ -8,6 +8,7 @@ import org.openqa.selenium.{By, WebDriver, WebElement}
 class SignInPage(implicit driver: WebDriver) extends ParentPage {
   private def emailInputField: WebElement = findByTestAttribute("signin-email")
   private def pwdInputField: WebElement = findByTestAttribute("signin-pwd")
+  def signInButton: WebElement = findByTestAttribute("sign-in-button")
   private def faceBookSignInButton: WebElement = findByTestAttribute("facebook-sign-in")
   private def googleSignInButton: WebElement = findByTestAttribute("google-sign-in")
   private def registerLink: WebElement = findByTestAttribute("register-link")

@@ -10,7 +10,7 @@ import org.openqa.selenium.{WebDriver, WebElement}
  */
 class SignInModule(implicit driver: WebDriver) extends ParentPage {
   private def signInLink: WebElement = findByTestAttribute("sign-in-link")
-  private def signInName: WebElement = findByTestAttribute("sign-in-name")
+  def signInName: WebElement = findByTestAttribute("sign-in-name")
 
   def clickSignInLink(): SignInPage = {
     new Actions(driver).moveToElement(signInLink).perform()
