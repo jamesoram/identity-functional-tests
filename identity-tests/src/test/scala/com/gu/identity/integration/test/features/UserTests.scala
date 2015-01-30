@@ -78,7 +78,6 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       SignInSteps().checkUserIsLoggedIn(userBeforeChange.userName)
     }
 
-    // this has to be disabled until social sign in on code is made public
     scenarioWeb("should be able to reset password") { implicit driver: WebDriver =>
       BaseSteps().goToStartPage()
       SignInSteps().signInUsingFaceBook()
