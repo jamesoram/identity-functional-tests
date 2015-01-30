@@ -1,5 +1,6 @@
 package com.gu.identity.integration.test.features
 
+import com.gu.automation.support.Config
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
 import com.gu.identity.integration.test.steps.SignInSteps
 import com.gu.integration.test.steps.BaseSteps
@@ -19,7 +20,7 @@ class LoginTests extends IdentitySeleniumTestSuite {
     scenarioWeb("should be able to login using existing Facebook account") { implicit driver: WebDriver =>
       BaseSteps().goToStartPage()
       SignInSteps().signInUsingFaceBook()
-      SignInSteps().checkUserIsLoggedIn(get("faceBookLoginName"))
+      SignInSteps().checkUserIsLoggedIn(Config().getUserValue("faceBookLoginName"))
       SignInSteps().checkUserIsLoggedInSecurely()
       SignInSteps().checkLoggedInThroughSocialMedia()
     }
@@ -27,7 +28,7 @@ class LoginTests extends IdentitySeleniumTestSuite {
     scenarioWeb("should be able to login using existing Google account") { implicit driver: WebDriver =>
       BaseSteps().goToStartPage()
       SignInSteps().signInUsingGoogle()
-      SignInSteps().checkUserIsLoggedIn(get("googleLoginName"))
+      SignInSteps().checkUserIsLoggedIn(Config().getUserValue("googleLoginName"))
       SignInSteps().checkUserIsLoggedInSecurely()
       SignInSteps().checkLoggedInThroughSocialMedia()
     }
