@@ -44,7 +44,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
   def checkUserIsLoggedIn(expectedLoginName: String) = {
     logger.step(s"Checking that user is logged in")
     val loginName = new ContainerWithSigninModulePage().signInModule().signInName.getText
-    loginName should be(expectedLoginName)
+    loginName should contain(expectedLoginName)
 
     val loginCookie = getCookie(LoginCookie)
     loginCookie.getValue should not be empty
@@ -60,8 +60,8 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     logger.step(s"Signing in using FaceBook")
     val signInPage = SignInSteps().clickSignInLink()
     val faceBookSignInPage = signInPage.clickFaceBookSignInButton()
-    faceBookSignInPage.enterEmail(Config().getUserValue("faceBookEmail"))
-    faceBookSignInPage.enterPwd(Config().getUserValue("faceBookPwd"))
+    faceBookSignInPage.enterEmail(sys.props.getOrElse("faceBookEmail", ""))
+    faceBookSignInPage.enterPwd(sys.props.getOrElse("faceBookPwd", ""))
     faceBookSignInPage.loginInButton.click()
   }
 
@@ -69,8 +69,8 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     logger.step(s"Signing in using Google")
     val signInPage = SignInSteps().clickSignInLink()
     val googleSignInPage = signInPage.clickGoogleSignInButton()
-    googleSignInPage.enterEmail(Config().getUserValue("googleEmail"))
-    googleSignInPage.enterPwd(Config().getUserValue("googlePwd"))
+    googleSignInPage.enterEmail(sys.props.getOrElse("googleEmail", ""))
+    googleSignInPage.enterPwd(sys.props.getOrElse("googlePwd", ""))
     googleSignInPage.loginInButton.click()
   }
 
