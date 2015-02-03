@@ -1,6 +1,7 @@
 package com.gu.identity.integration.test.pages
 
 import com.gu.integration.test.util.ElementLoader._
+import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.{WebDriver, WebElement}
 
 class ChangePasswordPage(implicit driver: WebDriver) extends UserFormPage {
@@ -32,6 +33,7 @@ class ChangePasswordPage(implicit driver: WebDriver) extends UserFormPage {
   }
 
   def clickResetPasswordLink(): PasswordResetRequestPage = {
+    new Actions(driver).moveToElement(resetPwdLink).perform()
     resetPwdLink.click()
     new PasswordResetRequestPage()
   }
