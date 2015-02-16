@@ -3,7 +3,7 @@ package com.gu.identity.integration.test.pages
 import com.gu.integration.test.pages.common.ParentPage
 import com.gu.integration.test.util.ElementLoader._
 import org.openqa.selenium.interactions.Actions
-import org.openqa.selenium.{WebDriver, WebElement}
+import org.openqa.selenium.{JavascriptExecutor, WebDriver, WebElement}
 
 /**
  * Do not confuse this with the sign in page. This is only the module which sits at the top of most frontend pages
@@ -19,7 +19,8 @@ class SignInModule(implicit driver: WebDriver) extends ParentPage {
   }
 
   def clickSignInLinkWhenLoggedIn(): ProfileNavMenu = {
-    new Actions(driver).moveToElement(signInLink)
+    val y = signInLink.getLocation
+    driver.asInstanceOf[JavascriptExecutor].executeScript(s"window.scrollTo(0, $y)")
     signInLink.click()
     new ProfileNavMenu
   }
