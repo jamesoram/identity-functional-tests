@@ -16,6 +16,6 @@ case class BaseSteps(implicit driver: WebDriver) extends TestLogging with Matche
   def goToTermsOfServicePage(useBetaRedirect: Boolean = false): TermsOfServicePage = {
     logger.step(s"I am on base page at url: $frontsBaseUrl")
     lazy val tosPage = new TermsOfServicePage()
-    goTo(tosPage, fromRelativeUrl("/help/terms-of-service"))
+    goTo(tosPage, fromRelativeUrl("/../help/terms-of-service"))
   }
 }
