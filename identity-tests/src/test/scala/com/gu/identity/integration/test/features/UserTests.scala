@@ -1,9 +1,12 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.ContainerWithSigninModulePage
+import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, EditAccountDetailsModule}
 import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
+import com.gu.identity.integration.test.util.User
+import com.gu.identity.integration.test.util.User._
 import com.gu.integration.test.steps.BaseSteps
+import com.gu.integration.test.util.UserConfig._
 import org.openqa.selenium.WebDriver
 import org.scalatest.EitherValues
 
