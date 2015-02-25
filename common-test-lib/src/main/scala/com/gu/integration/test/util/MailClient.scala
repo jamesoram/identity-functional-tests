@@ -61,7 +61,7 @@ object MailClient extends TestLogging {
 
   def isRecent(message: Message): Boolean = {
     val recentCalendar = Calendar.getInstance()
-    recentCalendar.add(Calendar.SECOND, -30)
+    recentCalendar.add(Calendar.SECOND, -55)
 
     message.getReceivedDate.after(recentCalendar.getTime)
   }

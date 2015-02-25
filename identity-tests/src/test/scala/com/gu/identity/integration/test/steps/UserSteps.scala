@@ -138,7 +138,7 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
 
   def checkResetPasswordMailAndGoToResetPwdPage(): PasswordResetPage = {
     logger.step(s"Opening password reset mail and following the provided link")
-    val latestResetEmail = waitUntilObject(new ResetEmailHasArrived(get("googleEmail"), get("googlePwd")), 60)
+    val latestResetEmail = waitUntilObject(new ResetEmailHasArrived(get("googleEmail"), get("googlePwd")), 30)
 
     lazy val pwdResetPage = new PasswordResetPage()
     goTo(pwdResetPage, latestResetEmail.getResetPasswordLink().get, useBetaRedirect = false)
