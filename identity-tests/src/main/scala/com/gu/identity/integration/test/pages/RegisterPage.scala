@@ -11,6 +11,7 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   private def lastNameInputField: WebElement = findByTestAttribute("reg-second-name")
   private def pwdInputField: WebElement = findByTestAttribute("reg-pwd")
   private def createButton: WebElement = findByTestAttribute("create-user-button")
+  private def registerWithFacebookButton: WebElement = findByTestAttribute("facebook-sign-in")
 
   def enterEmail(email: String) = {
     emailInputField.sendKeys(email)
@@ -40,6 +41,17 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   def clickCreateUser() = {
     createButton.scrollIntoView()
     createButton.click()
+    this
+  }
+
+  def clickRegisterWithFacebookButton() = {
+    registerWithFacebookButton.scrollIntoView()
+    registerWithFacebookButton.click()
+    this
+  }
+
+  def switchToNewSignIn(): RegisterPage = {
+    driver.get(driver.getCurrentUrl + "?switchesOn=id-social-oauth")
     this
   }
 }
