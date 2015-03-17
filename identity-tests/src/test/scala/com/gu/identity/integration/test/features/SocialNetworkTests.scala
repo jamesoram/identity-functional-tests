@@ -14,7 +14,10 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
     scenarioWeb("should be able to register using Facebook") { implicit driver: WebDriver =>
       val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
       SocialNetworkSteps().goToFacebookAsUser(facebookUser)
-      Thread sleep 20000
+      BaseSteps().goToStartPage(useBetaRedirect = false)
+      val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
+      registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
+      Thread sleep 10000
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
 
