@@ -51,7 +51,7 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   }
 
   def switchToNewSignIn(): RegisterPage = {
-    driver.get(driver.getCurrentUrl + "?switchesOn=id-social-oauth")
+    driver.get(driver.getCurrentUrl + "&switchesOn=id-social-oauth")
     this
   }
 }
