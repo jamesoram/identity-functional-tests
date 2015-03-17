@@ -14,17 +14,17 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
   def createNewFacebookTestUser(): FacebookTestUser = {
     logger.step(s"Creating new Facebook user")
     val facebookUser = FacebookTestUserService.createUser(new FacebookTestUser("Test User"), accessToken())
-    logger.step(s"Created new Facebook user ${facebookUser.email} with Id ${facebookUser.id}")
+    logger.step(s"Created new Facebook user ${facebookUser.email.get} with Id ${facebookUser.id.get}")
     facebookUser
   }
 
   def deleteFacebookTestUser(facebookTestUser: FacebookTestUser): Boolean = {
-    logger.step(s"Deleting Facebook test user ${facebookTestUser.email} with Id ${facebookTestUser.id}")
+    logger.step(s"Deleting Facebook test user ${facebookTestUser.email.get} with Id ${facebookTestUser.id.get}")
     FacebookTestUserService.deleteUser(facebookTestUser, accessToken())
   }
 
   def goToFacebookAsUser(facebookTestUser: FacebookTestUser): FacebookParentPage = {
-    logger.step(s"I am on the default Facebook landing page after login as ${facebookTestUser.email}")
+    logger.step(s"I am on the default Facebook landing page after login as ${facebookTestUser.email.get}")
     lazy val facebookSignInPage = new FacebookParentPage()
     goTo(facebookSignInPage, "https://facebook.com")
     facebookSignInPage.enterEmail(facebookTestUser.email.get)
