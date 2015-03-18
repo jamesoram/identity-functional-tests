@@ -7,6 +7,10 @@ object CookieUtil {
     driver.manage().getCookieNamed(cookieName)
   }
 
+  def removeCookie(cookieName: String)(implicit driver: WebDriver) = {
+    driver.manage().deleteCookieNamed(cookieName)
+  }
+
   /**
    * Use this to get a secure cookie. Make sure you either are on an HTTPS address or provide one as a param
    */
