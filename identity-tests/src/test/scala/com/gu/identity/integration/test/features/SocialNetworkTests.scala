@@ -24,5 +24,19 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
 
+    scenarioWeb("should get an error message if e-mail permissions are missing") { implicit driver: WebDriver =>
+      val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
+      SocialNetworkSteps().goToFacebookAsUser(facebookUser)
+      BaseSteps().goToStartPage(useBetaRedirect = false)
+      val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
+      val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
+      authDialog.editInformationProvided.click()
+      authDialog.emailCheckBox.click()
+      authDialog.confirmButton.click()
+      SocialNetworkSteps().checkUserGotFacebookEmailError()
+      SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
+      SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
+    }
+
   }
 }

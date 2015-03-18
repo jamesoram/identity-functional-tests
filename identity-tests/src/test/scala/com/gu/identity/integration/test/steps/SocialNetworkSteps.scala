@@ -4,7 +4,7 @@ import com.gu.automation.support.{Config, TestLogging}
 import com.gu.identity.integration.test.pages.{FacebookParentPage}
 import com.gu.identity.integration.test.util.facebook.{FacebookTestUserService, AccessToken, FacebookTestUser}
 import com.gu.integration.test.util.PageLoader._
-import org.openqa.selenium.WebDriver
+import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Matchers
 
 case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging with Matchers {
@@ -32,6 +32,14 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
     facebookSignInPage.loginInButton.click()
 
     facebookSignInPage
+  }
+
+  def checkUserGotFacebookEmailError() = {
+    try {
+      val formError = driver.findElement(By.xpath("//div[@class='form__error']")).getText()
+    } catch {
+      case _: org.openqa.selenium.NoSuchElementException => fail("Did not get Facebook e-mail error message")
+    }
   }
 
 }
