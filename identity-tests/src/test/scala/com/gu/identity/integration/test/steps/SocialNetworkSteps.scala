@@ -4,6 +4,7 @@ import com.gu.automation.support.{Config, TestLogging}
 import com.gu.identity.integration.test.pages.{FacebookParentPage}
 import com.gu.identity.integration.test.util.facebook.{FacebookTestUserService, AccessToken, FacebookTestUser}
 import com.gu.integration.test.util.PageLoader._
+import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Matchers
 
@@ -39,6 +40,20 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
       val formError = driver.findElement(By.xpath("//div[@class='form__error']")).getText()
     } catch {
       case _: org.openqa.selenium.NoSuchElementException => fail("Did not get Facebook e-mail error message")
+    }
+  }
+
+  def checkUserGotAutoSignInBanner() = {
+    val xpath = "//p[@class='site-message__message']"
+    try {
+      val wait = new WebDriverWait(driver, 15);
+      wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)))
+      val bannerText = driver.findElement(By.xpath(xpath)).getText()
+      bannerText should include ("signed into the Guardian using Facebook")
+    } catch {
+      case _: org.openqa.selenium.NoSuchElementException => fail("Did not get auto sign in banner")
+      case _: org.openqa.selenium.TimeoutException => fail("Did not get auto sign in banner")
+      case e: Exception => fail("Did not get auto sign in banner: " + e.getMessage)
     }
   }
 
