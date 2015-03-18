@@ -2,6 +2,7 @@ package com.gu.identity.integration.test.features
 
 import com.gu.automation.support.Config
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
+import com.gu.identity.integration.test.pages.FaceBookAuthDialog
 import com.gu.identity.integration.test.steps.SignInSteps
 import com.gu.integration.test.steps.{SocialNetworkSteps, BaseSteps}
 import com.gu.integration.test.util.UserConfig._
@@ -16,8 +17,10 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SocialNetworkSteps().goToFacebookAsUser(facebookUser)
       BaseSteps().goToStartPage(useBetaRedirect = false)
       val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
-      registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
-      Thread sleep 10000
+      val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
+      authDialog.confirmButton.click()
+      SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
+      SignInSteps().checkUserIsLoggedInSecurely()
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
 

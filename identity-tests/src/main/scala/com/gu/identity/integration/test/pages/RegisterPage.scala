@@ -1,5 +1,6 @@
 package com.gu.identity.integration.test.pages
 
+import com.gu.identity.integration.test.pages.FaceBookAuthDialog
 import com.gu.integration.test.util.ElementLoader._
 import com.gu.integration.test.util.WebElementEnhancer._
 import org.openqa.selenium.{WebDriver, WebElement}
@@ -44,10 +45,10 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
     this
   }
 
-  def clickRegisterWithFacebookButton() = {
+  def clickRegisterWithFacebookButton(): FaceBookAuthDialog = {
     registerWithFacebookButton.scrollIntoView()
     registerWithFacebookButton.click()
-    this
+    new FaceBookAuthDialog()
   }
 
   def switchToNewSignIn(): RegisterPage = {
