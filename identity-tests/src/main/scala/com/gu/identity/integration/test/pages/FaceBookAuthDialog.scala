@@ -28,6 +28,7 @@ class FaceBookAuthDialog(implicit driver: WebDriver) extends ParentPage {
 
   def clickConfirmButton() = {
     confirmButton.click()
+    new FrontPage()
   }
 
   def clickEditInformationProvided() = {
