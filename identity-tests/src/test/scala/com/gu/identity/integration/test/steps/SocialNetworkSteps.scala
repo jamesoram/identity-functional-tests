@@ -35,6 +35,7 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
     facebookSignInPage
   }
 
+  // TODO(nlindblad): Should go into a page
   def checkUserGotFacebookEmailError() = {
     try {
       val formError = driver.findElement(By.xpath("//div[@class='form__error']")).getText()
@@ -43,6 +44,7 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
     }
   }
 
+  // TODO(nlindblad): Should go into a page
   def checkUserGotAutoSignInBanner() = {
     val xpath = "//p[@class='site-message__message']"
     try {
