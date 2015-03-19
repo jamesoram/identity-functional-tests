@@ -22,7 +22,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
       authDialog.clickConfirmButton()
       SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
-      SignInSteps().checkUserIsLoggedInSecurely()
+      SignInSteps().checkThatLoginCookieExists()
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
 
@@ -45,7 +45,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
       val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
       authDialog.clickConfirmButton()
-      UserSteps().clearLoginCookies()
+      SignInSteps().clearLoginCookies()
       BaseSteps().goToStartPage()
       SocialNetworkSteps().checkUserGotAutoSignInBanner()
       SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)

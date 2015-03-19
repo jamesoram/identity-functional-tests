@@ -166,11 +166,6 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
     NewPasswordAndContainerWithSigninModule(resetPwd, new ContainerWithSigninModulePage())
   }
 
-  def clearLoginCookies() = {
-    removeCookie("GU_U")
-    removeCookie("SC_GU_U")
-  }
-
 }
 
 case class NewPasswordAndContainerWithSigninModule(newPwd: String, containerWithSignInpage: ContainerWithSigninModulePage)

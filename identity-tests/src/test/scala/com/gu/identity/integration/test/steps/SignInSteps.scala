@@ -102,4 +102,13 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     val loginCookie = getCookie(LoginCookie)
     loginCookie should be (null)
   }
+
+  def clearLoginCookies() = {
+    removeCookie(LoginCookie)
+    removeCookie(SecureLoginCookie)
+  }
+
+  def checkThatLoginCookieExists() = {
+    getCookie(LoginCookie) should not be (null)
+  }
 }
