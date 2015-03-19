@@ -1,6 +1,5 @@
 package com.gu.identity.integration.test.pages
 
-import com.gu.identity.integration.test.pages.FaceBookAuthDialog
 import com.gu.integration.test.util.ElementLoader._
 import com.gu.integration.test.util.WebElementEnhancer._
 import org.openqa.selenium.{By, JavascriptExecutor, WebDriver, WebElement}
@@ -46,8 +45,8 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   }
 
   def clickRegisterWithFacebookButton(): FaceBookAuthDialog = {
-    scrollToTop()
-    registerWithFacebookButton.scrollIntoView()
+    driver.asInstanceOf[JavascriptExecutor].executeScript("arguments[0].scrollIntoView(true);", registerWithFacebookButton);
+    Thread sleep 500
     registerWithFacebookButton.click()
     new FaceBookAuthDialog()
   }
@@ -55,11 +54,6 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   def switchToNewSignIn(): RegisterPage = {
     driver.get(driver.getCurrentUrl + "&switchesOn=id-social-oauth")
     this
-  }
-
-  def scrollToTop() = {
-    val javascript = driver.asInstanceOf[JavascriptExecutor]
-    javascript.executeScript("document.body.scrollTop = document.documentElement.scrollTop = 0;")
   }
 
   def getFormErrorText(): Option[String] = {
