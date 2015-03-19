@@ -8,7 +8,11 @@ class FacebookParentPage(implicit driver: WebDriver) extends ParentPage {
   private def emailInputField: WebElement = driver.findElement(By.id("email"))
   private def passwordInputField: WebElement = driver.findElement(By.id("pass"))
 
-  def loginInButton: WebElement = driver.findElement(By.xpath("//input[@value='Log in']"))
+  private def loginInButton: WebElement = driver.findElement(By.xpath("//input[@value='Log in']"))
+
+  def clickLoginButton() = {
+    loginInButton.click()
+  }
 
   def enterEmail(email: String) {
     emailInputField.sendKeys(email)

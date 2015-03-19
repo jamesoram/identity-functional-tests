@@ -30,7 +30,7 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
     goTo(facebookSignInPage, "https://facebook.com")
     facebookSignInPage.enterEmail(facebookTestUser.email.get)
     facebookSignInPage.enterPassword(facebookTestUser.password.get)
-    facebookSignInPage.loginInButton.click()
+    facebookSignInPage.clickLoginButton()
 
     facebookSignInPage
   }
