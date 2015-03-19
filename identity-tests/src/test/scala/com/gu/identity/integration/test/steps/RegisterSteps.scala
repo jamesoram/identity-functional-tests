@@ -56,4 +56,5 @@ case class RegisterSteps(implicit driver: WebDriver) extends TestLogging with Ma
     for (lastName <- user.lastName)
       registerPage.enterLastName(lastName)
   }
+
 }
