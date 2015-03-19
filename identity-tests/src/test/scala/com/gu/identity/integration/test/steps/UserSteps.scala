@@ -6,6 +6,7 @@ import com.gu.identity.integration.test.util.User._
 import com.gu.identity.integration.test.util.{FormError, User}
 import com.gu.integration.test.expectedconditions.ResetEmailHasArrived
 import com.gu.integration.test.steps.BaseSteps
+import com.gu.integration.test.util.CookieUtil._
 import com.gu.integration.test.util.ElementLoader._
 import com.gu.integration.test.util.PageLoader._
 import com.gu.integration.test.util.UserConfig._
@@ -164,6 +165,12 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
     BaseSteps().goToStartPage(useBetaRedirect = false)
     NewPasswordAndContainerWithSigninModule(resetPwd, new ContainerWithSigninModulePage())
   }
+
+  def clearLoginCookies() = {
+    removeCookie("GU_U")
+    removeCookie("SC_GU_U")
+  }
+
 }
 
 case class NewPasswordAndContainerWithSigninModule(newPwd: String, containerWithSignInpage: ContainerWithSigninModulePage)

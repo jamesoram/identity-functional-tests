@@ -3,7 +3,7 @@ package com.gu.identity.integration.test.features
 import com.gu.automation.support.Config
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
 import com.gu.identity.integration.test.pages.FaceBookAuthDialog
-import com.gu.identity.integration.test.steps.SignInSteps
+import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
 import com.gu.integration.test.steps.{SocialNetworkSteps, BaseSteps}
 import com.gu.integration.test.util.UserConfig._
 import com.gu.identity.integration.test.util.facebook._
@@ -17,7 +17,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
     scenarioWeb("should be able to register using Facebook") { implicit driver: WebDriver =>
       val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
       SocialNetworkSteps().goToFacebookAsUser(facebookUser)
-      BaseSteps().goToStartPage(useBetaRedirect = false)
+      BaseSteps().goToStartPage()
       val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
       val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
       authDialog.clickConfirmButton()
@@ -29,7 +29,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
     scenarioWeb("should get an error message if e-mail permissions are missing") { implicit driver: WebDriver =>
       val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
       SocialNetworkSteps().goToFacebookAsUser(facebookUser)
-      BaseSteps().goToStartPage(useBetaRedirect = false)
+      BaseSteps().goToStartPage()
       val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
       val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
       authDialog.clickEditInformationProvided().clickEmailCheckBox().clickConfirmButton()
@@ -41,13 +41,12 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
     scenarioWeb("should be auto signed in if registered and logged into Facebook") { implicit driver: WebDriver =>
       val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
       SocialNetworkSteps().goToFacebookAsUser(facebookUser)
-      BaseSteps().goToStartPage(useBetaRedirect = false)
+      BaseSteps().goToStartPage()
       val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
       val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
       authDialog.clickConfirmButton()
-      removeCookie("GU_U")
-      removeCookie("SC_GU_U")
-      BaseSteps().goToStartPage(useBetaRedirect = false)
+      UserSteps().clearLoginCookies()
+      BaseSteps().goToStartPage()
       SocialNetworkSteps().checkUserGotAutoSignInBanner()
       SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
