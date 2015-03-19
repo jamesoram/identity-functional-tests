@@ -1,7 +1,7 @@
 package com.gu.integration.test.steps
 
 import com.gu.automation.support.{Config, TestLogging}
-import com.gu.identity.integration.test.pages.{FacebookParentPage}
+import com.gu.identity.integration.test.pages.{FrontPage, RegisterPage, FacebookParentPage}
 import com.gu.identity.integration.test.util.facebook.{FacebookTestUserService, AccessToken, FacebookTestUser}
 import com.gu.integration.test.util.PageLoader._
 import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
@@ -35,27 +35,17 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
     facebookSignInPage
   }
 
-  // TODO(nlindblad): Should go into a page
-  def checkUserGotFacebookEmailError() = {
-    try {
-      val formError = driver.findElement(By.xpath("//div[@class='form__error']")).getText()
-    } catch {
-      case _: org.openqa.selenium.NoSuchElementException => fail("Did not get Facebook e-mail error message")
+  def checkUserGotFacebookEmailError(registerPage: RegisterPage) = {
+    registerPage.getFormErrorText() match {
+      case Some(errorMessage: String) =>
+      case None => fail("Did not get Facebook e-mail error message")
     }
   }
 
-  // TODO(nlindblad): Should go into a page
-  def checkUserGotAutoSignInBanner() = {
-    val xpath = "//p[@class='site-message__message']"
-    try {
-      val wait = new WebDriverWait(driver, 15);
-      wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)))
-      val bannerText = driver.findElement(By.xpath(xpath)).getText()
-      bannerText should include ("signed into the Guardian using Facebook")
-    } catch {
-      case _: org.openqa.selenium.NoSuchElementException => fail("Did not get auto sign in banner")
-      case _: org.openqa.selenium.TimeoutException => fail("Did not get auto sign in banner")
-      case e: Exception => fail("Did not get auto sign in banner: " + e.getMessage)
+  def checkUserGotAutoSignInBanner(frontPage: FrontPage) = {
+    frontPage.getSiteMessageText() match {
+      case Some(text: String) => text should include ("signed into the Guardian using Facebook")
+      case _ => fail("Did not get auto sign in banner")
     }
   }
 

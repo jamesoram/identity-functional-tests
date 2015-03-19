@@ -2,7 +2,7 @@ package com.gu.identity.integration.test.features
 
 import com.gu.automation.support.Config
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.FaceBookAuthDialog
+import com.gu.identity.integration.test.pages.{FrontPage, FaceBookAuthDialog}
 import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
 import com.gu.integration.test.steps.{SocialNetworkSteps, BaseSteps}
 import com.gu.integration.test.util.UserConfig._
@@ -33,7 +33,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
       val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
       authDialog.clickEditInformationProvided().clickEmailCheckBox().clickConfirmButton()
-      SocialNetworkSteps().checkUserGotFacebookEmailError()
+      SocialNetworkSteps().checkUserGotFacebookEmailError(registerPage)
       SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
@@ -41,13 +41,14 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
     scenarioWeb("should be auto signed in if registered and logged into Facebook") { implicit driver: WebDriver =>
       val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
       SocialNetworkSteps().goToFacebookAsUser(facebookUser)
+      val frontPage = new FrontPage()
       BaseSteps().goToStartPage()
       val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
       val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
       authDialog.clickConfirmButton()
       SignInSteps().clearLoginCookies()
       BaseSteps().goToStartPage()
-      SocialNetworkSteps().checkUserGotAutoSignInBanner()
+      SocialNetworkSteps().checkUserGotAutoSignInBanner(frontPage)
       SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }

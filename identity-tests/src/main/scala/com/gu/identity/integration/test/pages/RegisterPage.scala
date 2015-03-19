@@ -3,7 +3,7 @@ package com.gu.identity.integration.test.pages
 import com.gu.identity.integration.test.pages.FaceBookAuthDialog
 import com.gu.integration.test.util.ElementLoader._
 import com.gu.integration.test.util.WebElementEnhancer._
-import org.openqa.selenium.{JavascriptExecutor, WebDriver, WebElement}
+import org.openqa.selenium.{By, JavascriptExecutor, WebDriver, WebElement}
 
 class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   private def emailInputField: WebElement = findByTestAttribute("reg-email")
@@ -60,5 +60,13 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   def scrollToTop() = {
     val javascript = driver.asInstanceOf[JavascriptExecutor]
     javascript.executeScript("document.body.scrollTop = document.documentElement.scrollTop = 0;")
+  }
+
+  def getFormErrorText(): Option[String] = {
+    try {
+      Some(driver.findElement(By.xpath("//div[@class='form__error']")).getText())
+    } catch {
+      case _: org.openqa.selenium.NoSuchElementException => None
+    }
   }
 }
