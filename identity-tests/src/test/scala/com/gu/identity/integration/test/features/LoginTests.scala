@@ -22,7 +22,6 @@ class LoginTests extends IdentitySeleniumTestSuite {
       SignInSteps().signInUsingFaceBook()
       SignInSteps().checkUserIsLoggedIn(Config().getUserValue("faceBookLoginName"))
       SignInSteps().checkUserIsLoggedInSecurely()
-      SignInSteps().checkLoggedInThroughSocialMedia()
     }
 
     scenarioWeb("should be able to login using existing Google account") { implicit driver: WebDriver =>
@@ -30,7 +29,6 @@ class LoginTests extends IdentitySeleniumTestSuite {
       SignInSteps().signInUsingGoogle()
       SignInSteps().checkUserIsLoggedIn(Config().getUserValue("googleLoginName"))
       SignInSteps().checkUserIsLoggedInSecurely()
-      SignInSteps().checkLoggedInThroughSocialMedia()
     }
   }
 }
