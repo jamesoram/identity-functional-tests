@@ -81,11 +81,8 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
     scenarioWeb("should be able to reset password") { implicit driver: WebDriver =>
       BaseSteps().goToStartPage()
       SignInSteps().signInUsingFaceBook()
-      UserSteps().requestToResetPassword(new ContainerWithSigninModulePage())
-
-      val resetPwdPage = UserSteps().checkResetPasswordMailAndGoToResetPwdPage()
-
-      UserSteps().resetPassword(resetPwdPage)
+      val passwordResetSentPage = UserSteps().requestToResetPassword(new ContainerWithSigninModulePage())
+      UserSteps().checkUserGotPasswordResetSentMessage(passwordResetSentPage)
     }
   }
 }
