@@ -139,7 +139,7 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
   }
 
   def checkUserGotPasswordResetSentMessage(passwordResetSentPage: PasswordResetSentPage) = {
-    passwordResetSentPage.getMessagText() should be ("Now check your email")
+    passwordResetSentPage.getMessageText() should be ("Now check your email")
   }
 
 }
