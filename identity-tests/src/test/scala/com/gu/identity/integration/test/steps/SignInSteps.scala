@@ -15,7 +15,6 @@ import org.scalatest.Matchers
 case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matchers {
   private val LoginCookie: String = "GU_U"
   private val SecureLoginCookie: String = "SC_GU_U"
-  private val SocialMediaCookieMI: String = "GU_MI"
 
   def clickSignInLink(): SignInPage = {
     logger.step("Clicking sign in link")
@@ -68,7 +67,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
   def signInUsingNewFaceBook() = {
     logger.step(s"Signing in using FaceBook")
     val signInPage = SignInSteps().clickSignInLink()
-    val faceBookSignInPage = signInPage.switchToNewSignIn().clickFaceBookSignInButton()
+    val faceBookSignInPage = signInPage.clickFaceBookSignInButton()
     faceBookSignInPage.enterEmail(Config().getUserValue("faceBookEmail"))
     faceBookSignInPage.enterPwd(Config().getUserValue("faceBookPwd"))
     faceBookSignInPage.loginInButton.click()
@@ -77,16 +76,10 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
   def signInUsingGoogle() = {
     logger.step(s"Signing in using Google")
     val signInPage = SignInSteps().clickSignInLink()
-    val googleSignInPage = signInPage.switchToNewSignIn().clickGoogleSignInButton()
+    val googleSignInPage = signInPage.clickGoogleSignInButton()
     googleSignInPage.enterEmail(Config().getUserValue("googleEmail"))
     googleSignInPage.enterPwd(Config().getUserValue("googlePwd"))
     googleSignInPage.loginInButton.click()
-  }
-
-  def checkLoggedInThroughSocialMedia() = {
-    logger.step(s"Checking that user is logged in through Social Media")
-    val loginCookieMI = getCookie(SocialMediaCookieMI)
-    loginCookieMI.getValue should not be empty
   }
 
   def signOut(pageWithSignInModule: ContainerWithSigninModulePage) = {

@@ -4,7 +4,6 @@ import com.gu.automation.support.TestLogging
 import com.gu.identity.integration.test.pages._
 import com.gu.identity.integration.test.util.User._
 import com.gu.identity.integration.test.util.{FormError, User}
-import com.gu.integration.test.expectedconditions.ResetEmailHasArrived
 import com.gu.integration.test.steps.BaseSteps
 import com.gu.integration.test.util.CookieUtil._
 import com.gu.integration.test.util.ElementLoader._
@@ -135,35 +134,12 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
     resetPwdPage.clickResetPassword()
 
     waitForPageToLoad
+
+    new PasswordResetSentPage()
   }
 
-  def checkResetPasswordMailAndGoToResetPwdPage(): PasswordResetPage = {
-    logger.step(s"Opening password reset mail and following the provided link")
-    val latestResetEmail = waitUntilObject(new ResetEmailHasArrived(get("googleEmail"), get("googlePwd")), 30)
-
-    lazy val pwdResetPage = new PasswordResetPage()
-    goTo(pwdResetPage, latestResetEmail.getResetPasswordLink().get, useBetaRedirect = false)
-
-    pwdResetPage
-  }
-
-  def resetPassword(pwdResetPage: PasswordResetPage): NewPasswordAndContainerWithSigninModule = {
-    logger.step(s"Resetting password")
-    val resetPwd = generateRandomAlphaNumericString(10)
-    pwdResetPage.enterNewPassword(resetPwd)
-    pwdResetPage.enterNewRepeatPassword(resetPwd)
-
-    val resetConfirmPage = pwdResetPage.submitChangePassword()
-
-    waitForPageToLoad
-
-    pwdResetPage.getAllValidationFormErrors() should be('empty)
-    resetConfirmPage.isPasswordChangeMsgDisplayed()
-
-    waitForPageToLoad
-
-    BaseSteps().goToStartPage(useBetaRedirect = false)
-    NewPasswordAndContainerWithSigninModule(resetPwd, new ContainerWithSigninModulePage())
+  def checkUserGotPasswordResetSentMessage(passwordResetSentPage: PasswordResetSentPage) = {
+    passwordResetSentPage.getMessageText() should be ("Now check your email")
   }
 
 }
