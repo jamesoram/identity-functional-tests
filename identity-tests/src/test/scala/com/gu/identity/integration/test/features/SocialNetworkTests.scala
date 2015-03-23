@@ -46,7 +46,9 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
       val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
       authDialog.clickConfirmButton()
-      SignInSteps().clearLoginCookies()
+      SignInSteps().signOut(frontPage)
+      val newLogOutTime = System.currentTimeMillis / 1000 - 24 * 3600
+      SignInSteps().setSignOutCookieWithTime(newLogOutTime)
       BaseSteps().goToStartPage()
       SocialNetworkSteps().checkUserGotAutoSignInBanner(frontPage)
       SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)

@@ -11,6 +11,11 @@ object CookieUtil {
     driver.manage().deleteCookieNamed(cookieName)
   }
 
+  def createCookie(cookieName: String, content: String)(implicit driver: WebDriver) = {
+    val cookie = new Cookie(cookieName, content)
+    driver.manage().addCookie(cookie)
+  }
+
   /**
    * Use this to get a secure cookie. Make sure you either are on an HTTPS address or provide one as a param
    */
