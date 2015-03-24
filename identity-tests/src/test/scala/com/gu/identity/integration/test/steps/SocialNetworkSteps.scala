@@ -65,4 +65,12 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
     }
   }
 
+  def checkUserIsOnFacebook() = {
+    val facebookUrl = "^https://www.facebook.com/(.*)$".r
+    driver.getCurrentUrl() match {
+      case facebookUrl(c) => logger.step("User is on Facebook")
+      case _ => fail("User is not on Facebook")
+    }
+  }
+
 }

@@ -67,5 +67,20 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
+
+    scenarioWeb("should stay on Facebook when entering wrong Facebook password during re-authentication") { implicit driver: WebDriver =>
+      val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
+      SocialNetworkSteps().goToFacebookAsUser(facebookUser)
+      BaseSteps().goToStartPage()
+      val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
+      val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
+      authDialog.clickConfirmButton()
+      val editAccountDetailsPage = UserSteps().goToEditProfilePage(new ContainerWithSigninModulePage())
+      SocialNetworkSteps().checkUserGotReAuthenticationMessage(editAccountDetailsPage)
+      val facebookConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithFacebookButton
+      val editProfilePage = facebookConfirmPasswordDialog.enterPassword("wrongpassword").clickContinueButton()
+      SocialNetworkSteps().checkUserIsOnFacebook()
+      SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
+    }
   }
 }
