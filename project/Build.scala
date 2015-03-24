@@ -9,7 +9,7 @@ object Build extends Build {
       "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/",
       "Maven Central" at "http://repo1.maven.org/maven2/"),
     libraryDependencies ++= Seq(
-      "com.gu" %% "scala-automation" % "1.34",
+      "com.gu" %% "scala-automation" % "1.48",
       "com.sun.mail" % "javax.mail" % "1.5.2",
       "com.sun.mail" % "imap" % "1.5.2",
       "com.stackmob" %% "newman" % "1.3.5",
