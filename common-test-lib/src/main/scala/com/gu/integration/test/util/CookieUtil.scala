@@ -7,10 +7,12 @@ object CookieUtil {
     driver.manage().getCookieNamed(cookieName)
   }
 
+  @deprecated
   def removeCookie(cookieName: String)(implicit driver: WebDriver) = {
     driver.manage().deleteCookieNamed(cookieName)
   }
 
+  @deprecated
   def createCookie(cookieName: String, content: String)(implicit driver: WebDriver) = {
     val cookie = new Cookie(cookieName, content)
     driver.manage().addCookie(cookie)
