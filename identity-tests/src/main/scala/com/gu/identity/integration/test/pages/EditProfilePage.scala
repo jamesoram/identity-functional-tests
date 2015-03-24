@@ -10,6 +10,7 @@ import org.openqa.selenium.{By, WebDriver, WebElement}
 class EditProfilePage(implicit driver: WebDriver) extends ParentPage {
   private def editAccountDetailsTab: WebElement = findByTestAttribute("edit-account-details")
   private def confirmWithFacebookButton: WebElement = findByTestAttribute("facebook-sign-in")
+  private def confirmWithGoogleButton: WebElement = findByTestAttribute("google-sign-in")
 
   private def pageHeader: Option[WebElement] = {
     try {
@@ -38,5 +39,10 @@ class EditProfilePage(implicit driver: WebDriver) extends ParentPage {
   def clickConfirmWithFacebookButton = {
     confirmWithFacebookButton.click()
     new FacebookConfirmPasswordDialog()
+  }
+
+  def clickConfirmWithGoogleButton = {
+    confirmWithGoogleButton.click()
+    new GoogleConfirmPasswordDialog()
   }
 }
