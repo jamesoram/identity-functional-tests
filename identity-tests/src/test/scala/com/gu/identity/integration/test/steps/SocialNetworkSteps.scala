@@ -1,6 +1,6 @@
 package com.gu.integration.test.steps
 
-import com.gu.automation.support.{Config, TestLogging}
+import com.gu.automation.support.{LocalStorageManager, Config, TestLogging}
 import com.gu.identity.integration.test.pages.{FrontPage, RegisterPage, FacebookParentPage}
 import com.gu.identity.integration.test.util.facebook.{FacebookTestUserService, AccessToken, FacebookTestUser}
 import com.gu.integration.test.util.PageLoader._
@@ -9,6 +9,8 @@ import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Matchers
 
 case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging with Matchers {
+
+  private val facebookLocalStorageKey = "gu.id.nextFbCheck"
 
   def accessToken(): AccessToken = AccessToken(Config().getUserValue("facebookApplicationId"), Config().getUserValue("facebookApplicationSecret"))
 
@@ -47,6 +49,10 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
       case Some(text: String) => text should include ("signed into the Guardian using Facebook")
       case _ => fail("Did not get auto sign in banner")
     }
+  }
+
+  def clearLocalStorageFacebookValue() = {
+    LocalStorageManager.remove(facebookLocalStorageKey)
   }
 
 }

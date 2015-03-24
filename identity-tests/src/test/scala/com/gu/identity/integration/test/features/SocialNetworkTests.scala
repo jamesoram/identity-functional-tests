@@ -49,6 +49,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SignInSteps().signOut(frontPage)
       val newLogOutTime = System.currentTimeMillis / 1000 - 24 * 3600
       SignInSteps().setSignOutCookieWithTime(newLogOutTime)
+      SocialNetworkSteps().clearLocalStorageFacebookValue()
       BaseSteps().goToStartPage()
       SocialNetworkSteps().checkUserGotAutoSignInBanner(frontPage)
       SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
