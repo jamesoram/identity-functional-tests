@@ -1,7 +1,7 @@
 package com.gu.integration.test.steps
 
 import com.gu.automation.support.{LocalStorageManager, Config, TestLogging}
-import com.gu.identity.integration.test.pages.{FrontPage, RegisterPage, FacebookParentPage}
+import com.gu.identity.integration.test.pages.{EditProfilePage, FrontPage, RegisterPage, FacebookParentPage}
 import com.gu.identity.integration.test.util.facebook.{FacebookTestUserService, AccessToken, FacebookTestUser}
 import com.gu.integration.test.util.PageLoader._
 import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
@@ -51,8 +51,31 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
     }
   }
 
+  def checkUserGotReAuthenticationMessage(editProfilePage: EditProfilePage) = {
+    logger.step("Check that user got asked to re-authenticate")
+    editProfilePage.getHeaderText() match {
+      case Some(text: String) => text should be ("Confirm your identity")
+      case _ => fail("Did not get asked to re-authenticate")
+    }
+  }
+
+  def checkUserIsOnEditProfilePage(editProfilePage: EditProfilePage) = {
+    logger.step("Check that user is on edit profile page")
+    editProfilePage.getHeaderText() match {
+      case Some(text: String) => text should be ("Edit your profile")
+      case _ => fail("Is not on edit profile page")
+    }
+  }
+
+  def checkUserIsOnFacebook() = {
+    val facebookUrl = "^https://www.facebook.com/(.*)$".r
+    driver.getCurrentUrl() match {
+      case facebookUrl(c) => logger.step("User is on Facebook")
+      case _ => fail("User is not on Facebook")
+    }
+  }
+
   def clearLocalStorageFacebookValue() = {
     LocalStorageManager.remove(facebookLocalStorageKey)
   }
-
 }

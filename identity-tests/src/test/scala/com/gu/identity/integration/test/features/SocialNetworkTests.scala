@@ -2,7 +2,7 @@ package com.gu.identity.integration.test.features
 
 import com.gu.automation.support.Config
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{FrontPage, FaceBookAuthDialog}
+import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage, FaceBookAuthDialog}
 import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
 import com.gu.integration.test.steps.{SocialNetworkSteps, BaseSteps}
 import com.gu.integration.test.util.UserConfig._
@@ -56,5 +56,44 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
 
+    scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Facebook") { implicit driver: WebDriver =>
+      val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
+      SocialNetworkSteps().goToFacebookAsUser(facebookUser)
+      BaseSteps().goToStartPage()
+      val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
+      val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
+      authDialog.clickConfirmButton()
+      val editAccountDetailsPage = UserSteps().goToEditProfilePage(new ContainerWithSigninModulePage())
+      SocialNetworkSteps().checkUserGotReAuthenticationMessage(editAccountDetailsPage)
+      val facebookConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithFacebookButton
+      val editProfilePage = facebookConfirmPasswordDialog.enterPassword(facebookUser.password.get).clickContinueButton()
+      SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
+      SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
+    }
+
+    scenarioWeb("should stay on Facebook when entering wrong Facebook password during re-authentication") { implicit driver: WebDriver =>
+      val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
+      SocialNetworkSteps().goToFacebookAsUser(facebookUser)
+      BaseSteps().goToStartPage()
+      val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
+      val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
+      authDialog.clickConfirmButton()
+      val editAccountDetailsPage = UserSteps().goToEditProfilePage(new ContainerWithSigninModulePage())
+      SocialNetworkSteps().checkUserGotReAuthenticationMessage(editAccountDetailsPage)
+      val facebookConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithFacebookButton
+      val editProfilePage = facebookConfirmPasswordDialog.enterPassword("wrongpassword").clickContinueButton()
+      SocialNetworkSteps().checkUserIsOnFacebook()
+      SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
+    }
+
+    scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Google") { implicit driver: WebDriver =>
+      BaseSteps().goToStartPage()
+      SignInSteps().signInUsingGoogle()
+      val editAccountDetailsPage = UserSteps().goToEditProfilePage(new ContainerWithSigninModulePage())
+      SocialNetworkSteps().checkUserGotReAuthenticationMessage(editAccountDetailsPage)
+      val googleConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithGoogleButton
+      val editProfilePage = googleConfirmPasswordDialog.clickChooseAccountButton()
+      SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
+    }
   }
 }

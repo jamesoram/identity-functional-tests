@@ -45,6 +45,12 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
     editProfilePage.clickEditAccountDetailsTab()
   }
 
+  def goToEditAccountPage(pageWithSignInModule: ContainerWithSigninModulePage): EditProfilePage = {
+    logger.step("Going to the edit profile page")
+    val editProfilePage = goToEditProfilePage(pageWithSignInModule)
+    editProfilePage
+  }
+
   def changeEmail(editAccountDetailsModule: EditAccountDetailsModule): Either[List[FormError], String] = {
     changeEmailTo(generateRandomEmail, editAccountDetailsModule)
   }
