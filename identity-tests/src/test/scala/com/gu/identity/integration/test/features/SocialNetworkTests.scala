@@ -1,14 +1,10 @@
 package com.gu.identity.integration.test.features
 
-import com.gu.automation.support.Config
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage, FaceBookAuthDialog}
-import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
-import com.gu.integration.test.steps.{SocialNetworkSteps, BaseSteps}
-import com.gu.integration.test.util.UserConfig._
-import com.gu.identity.integration.test.util.facebook._
+import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage}
+import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
+import com.gu.integration.test.steps.{BaseSteps, SocialNetworkSteps}
 import org.openqa.selenium.WebDriver
-import com.gu.integration.test.util.CookieUtil._
 
 
 class SocialNetworkTests extends IdentitySeleniumTestSuite {
@@ -86,6 +82,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
 
+    /*
     scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Google") { implicit driver: WebDriver =>
       BaseSteps().goToStartPage()
       SignInSteps().signInUsingGoogle()
@@ -95,5 +92,6 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       val editProfilePage = googleConfirmPasswordDialog.clickChooseAccountButton()
       SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
     }
+    */
   }
 }
