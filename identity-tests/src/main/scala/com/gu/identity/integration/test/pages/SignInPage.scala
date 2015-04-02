@@ -42,10 +42,12 @@ class SignInPage(implicit driver: WebDriver) extends ParentPage {
   }
 
   def ensureOauthActive() = {
-    // with the move to the centralised configuration we need to check that we are testing the correct API
-    val oauthActive = driver.asInstanceOf[JavascriptExecutor].executeScript("return guardian.config.switches.idSocialOauth")
-    if (!oauthActive.asInstanceOf[Boolean]) {
-      throw new RuntimeException("Federation API not active")
+    if (driver.getCurrentUrl().contains("code")) {
+      // with the move to the centralised configuration we need to check that we are testing the correct API
+      val oauthActive = driver.asInstanceOf[JavascriptExecutor].executeScript("return guardian.config.switches.idSocialOauth")
+      if (!oauthActive.asInstanceOf[Boolean]) {
+        throw new RuntimeException("Federation API not active")
+      }
     }
   }
 
