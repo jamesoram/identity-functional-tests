@@ -1,6 +1,6 @@
 package com.gu.identity.integration.test.steps
 
-import com.gu.automation.support.{Config, TestLogging}
+import com.gu.automation.support.{CookieManager, Config, TestLogging}
 import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, SignInPage}
 import com.gu.identity.integration.test.util.User
 import com.gu.integration.test.steps.BaseSteps
@@ -15,6 +15,7 @@ import org.scalatest.Matchers
 case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matchers {
   private val LoginCookie: String = "GU_U"
   private val SecureLoginCookie: String = "SC_GU_U"
+  private val SignOutCookie: String = "GU_SO"
 
   def clickSignInLink(): SignInPage = {
     logger.step("Clicking sign in link")
@@ -97,8 +98,17 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
   }
 
   def clearLoginCookies() = {
-    removeCookie(LoginCookie)
-    removeCookie(SecureLoginCookie)
+    CookieManager.removeCookie(LoginCookie)
+    CookieManager.removeCookie(SecureLoginCookie)
+  }
+
+  def clearSignOutCookie() = {
+    CookieManager.removeCookie(SignOutCookie)
+  }
+
+  def setSignOutCookieWithTime(time: Long) = {
+    clearSignOutCookie()
+    CookieManager.addCookie(SignOutCookie, time.toString)
   }
 
   def checkThatLoginCookieExists() = {
