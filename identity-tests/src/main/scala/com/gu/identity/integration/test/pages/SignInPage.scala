@@ -25,12 +25,14 @@ class SignInPage(implicit driver: WebDriver) extends ParentPage {
     this
   }
 
-  def clickFaceBookSignInButton(): FaceBookSignInPage = {
+  def clickFaceBookSignInButton(waitForFacebookEmailElement: Boolean = true): FaceBookSignInPage = {
     ensureOauthActive()
     faceBookSignInButton.click()
 
     //this is needed because sometimes the above click does not wait for the facebook page to be loaded
-    waitUntil(visibilityOf(faceBookEmailElement), 10)
+    if (waitForFacebookEmailElement) {
+      waitUntil(visibilityOf(faceBookEmailElement), 10)
+    }
 
     new FaceBookSignInPage()
   }
