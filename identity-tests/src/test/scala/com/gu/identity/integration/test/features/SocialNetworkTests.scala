@@ -82,7 +82,6 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
 
-    /*
     scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Google") { implicit driver: WebDriver =>
       BaseSteps().goToStartPage()
       SignInSteps().signInUsingGoogle()
@@ -92,6 +91,6 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       val editProfilePage = googleConfirmPasswordDialog.clickChooseAccountButton()
       SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
     }
-    */
+
   }
 }

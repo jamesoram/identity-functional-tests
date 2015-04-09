@@ -24,11 +24,11 @@ class LoginTests extends IdentitySeleniumTestSuite {
       SignInSteps().checkUserIsLoggedInSecurely()
     }
 
-//    scenarioWeb("should be able to login using existing Google account") { implicit driver: WebDriver =>
-//      BaseSteps().goToStartPage()
-//      SignInSteps().signInUsingGoogle()
-//      SignInSteps().checkUserIsLoggedIn(Config().getUserValue("googleLoginName"))
-//      SignInSteps().checkUserIsLoggedInSecurely()
-//    }
+    scenarioWeb("should be able to login using existing Google account") { implicit driver: WebDriver =>
+      BaseSteps().goToStartPage()
+      SignInSteps().signInUsingGoogle()
+      SignInSteps().checkUserIsLoggedIn(Config().getUserValue("googleLoginName"))
+      SignInSteps().checkUserIsLoggedInSecurely()
+    }
   }
 }
