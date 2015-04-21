@@ -21,7 +21,7 @@ class FaceBookAuthDialog(implicit driver: WebDriver) extends ParentPage {
 
   private def emailCheckBox: WebElement = {
     val xpath = "(//span[preceding::input[@value='email']])[1]"
-    val wait = new WebDriverWait(driver, 10);
+    val wait = new WebDriverWait(driver, 20);
     wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)))
     driver.findElement(By.xpath(xpath))
   }
