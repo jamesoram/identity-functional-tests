@@ -1,7 +1,7 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage}
+import com.gu.identity.integration.test.pages.{FrontPage, ContainerWithSigninModulePage}
 import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
 import com.gu.integration.test.steps.{BaseSteps, SocialNetworkSteps}
 import org.openqa.selenium.WebDriver
@@ -90,6 +90,27 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       val googleConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithGoogleButton
       val editProfilePage = googleConfirmPasswordDialog.clickChooseAccountButton()
       SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
+    }
+
+    scenarioWeb("Social user can change email on profile and still sign in") { implicit driver: WebDriver =>
+      val newEmail = "sp017@changed.com"
+      val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
+      SocialNetworkSteps().goToFacebookAsUser(facebookUser)
+
+      BaseSteps().goToStartPage()
+      val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
+      val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton().clickConfirmButton()
+      val editAccountDetailsPage = UserSteps().goToEditAccountPage(new ContainerWithSigninModulePage()).clickConfirmWithFacebookButton
+        .enterPassword(facebookUser.password.get).clickContinueButton().clickEditAccountDetailsTab()
+      val originalEmail = editAccountDetailsPage.getEmailAddress()
+      editAccountDetailsPage.enterEmailAddress(newEmail)
+      editAccountDetailsPage.saveChanges()
+      SignInSteps().signOut(new ContainerWithSigninModulePage())
+      BaseSteps().goToStartPage()
+      SignInSteps().clickSignInLink()
+      SignInSteps().clickSignInWithFacebook()
+      BaseSteps().goToStartPage()
+      SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
 
   }
