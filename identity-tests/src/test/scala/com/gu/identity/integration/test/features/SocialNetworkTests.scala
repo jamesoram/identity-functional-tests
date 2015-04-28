@@ -93,7 +93,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
     }
 
     scenarioWeb("Social user can change email on profile and still sign in") { implicit driver: WebDriver =>
-      val newEmail = "sp017@changed.com"
+      val newEmail = System.currentTimeMillis() + "sp017@changed.com"
       val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
       SocialNetworkSteps().goToFacebookAsUser(facebookUser)
 
@@ -111,7 +111,11 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SignInSteps().clickSignInWithFacebook()
       BaseSteps().goToStartPage()
       SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
-    }
 
+      BaseSteps().goToStartPage()
+      val signInEmail = UserSteps().goToEditAccountPage(new ContainerWithSigninModulePage())
+        .clickEditAccountDetailsTab().getEmailAddress()
+      signInEmail should be(newEmail)
+    }
   }
 }
