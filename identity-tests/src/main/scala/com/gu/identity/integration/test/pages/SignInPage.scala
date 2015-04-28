@@ -26,13 +26,17 @@ class SignInPage(implicit driver: WebDriver) extends ParentPage {
   }
 
   def clickFaceBookSignInButton(): FaceBookSignInPage = {
-    ensureOauthActive()
-    faceBookSignInButton.click()
-
+    clickResignInWithFacebook
     //this is needed because sometimes the above click does not wait for the facebook page to be loaded
     waitUntil(visibilityOf(faceBookEmailElement), 10)
 
     new FaceBookSignInPage()
+  }
+
+  def clickResignInWithFacebook = {
+    ensureOauthActive()
+    faceBookSignInButton
+    this
   }
 
   def clickGoogleSignInButton(): GoogleSignInPage = {
