@@ -35,7 +35,7 @@ class SignInPage(implicit driver: WebDriver) extends ParentPage {
 
   def clickResignInWithFacebook = {
     ensureOauthActive()
-    faceBookSignInButton
+    faceBookSignInButton.click()
     this
   }
 

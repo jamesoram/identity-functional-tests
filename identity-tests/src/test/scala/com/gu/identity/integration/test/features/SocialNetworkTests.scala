@@ -110,9 +110,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       SignInSteps().clickSignInLink()
       SignInSteps().clickSignInWithFacebook()
       BaseSteps().goToStartPage()
-      val signInEmail = UserSteps().goToEditAccountPage(new ContainerWithSigninModulePage()).clickEditAccountDetailsTab().getEmailAddress()
-
-      signInEmail should be(newEmail)
+      SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
 
   }
