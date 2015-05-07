@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver
 
 
 class SocialNetworkTests extends IdentitySeleniumTestSuite {
-
+  /*
   feature("Registration and sign-in using Facebook") {
     scenarioWeb("should be able to register using Facebook") { implicit driver: WebDriver =>
       val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
@@ -117,5 +117,5 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         .clickEditAccountDetailsTab().getEmailAddress()
       signInEmail should be(newEmail)
     }
-  }
+  }*/
 }
