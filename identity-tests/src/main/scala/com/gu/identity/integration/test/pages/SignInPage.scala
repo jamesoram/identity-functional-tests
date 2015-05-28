@@ -3,7 +3,7 @@ package com.gu.identity.integration.test.pages
 import com.gu.integration.test.pages.common.ParentPage
 import com.gu.integration.test.util.ElementLoader._
 import org.openqa.selenium.support.ui.ExpectedConditions._
-import org.openqa.selenium.{JavascriptExecutor, By, WebDriver, WebElement}
+import org.openqa.selenium.{By, WebDriver, WebElement}
 
 class SignInPage(implicit driver: WebDriver) extends ParentPage {
 
@@ -34,26 +34,25 @@ class SignInPage(implicit driver: WebDriver) extends ParentPage {
   }
 
   def clickResignInWithFacebook = {
-    ensureOauthActive()
     faceBookSignInButton.click()
     this
   }
 
   def clickGoogleSignInButton(): GoogleSignInPage = {
-    ensureOauthActive()
     googleSignInButton.click()
     new GoogleSignInPage()
   }
 
-  def ensureOauthActive() = {
-    if (driver.getCurrentUrl().contains("code")) {
-      // with the move to the centralised configuration we need to check that we are testing the correct API
-      val oauthActive = driver.asInstanceOf[JavascriptExecutor].executeScript("return guardian.config.switches.idSocialOauth")
-      if (!oauthActive.asInstanceOf[Boolean]) {
-        throw new RuntimeException("Federation API not active")
-      }
-    }
-  }
+// removed function as idSocialOauth switch has been removed
+//  def ensureOauthActive() = {
+//    if (driver.getCurrentUrl().contains("code")) {
+//      // with the move to the centralised configuration we need to check that we are testing the correct API
+//      val oauthActive = driver.asInstanceOf[JavascriptExecutor].executeScript("return guardian.config.switches.idSocialOauth")
+//      if (!oauthActive.asInstanceOf[Boolean]) {
+//        throw new RuntimeException("Federation API not active")
+//      }
+//    }
+//  }
 
   def clickRegisterNewUserLink(): RegisterPage = {
     registerLink.click()
