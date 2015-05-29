@@ -38,7 +38,7 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
 
   def checkUserGotFacebookEmailError(registerPage: RegisterPage) = {
     registerPage.getFormErrorText() match {
-      case Some(errorMessage: String) =>
+      case Some(errorMessage: String) => errorMessage should include ("allow access to your email address")
       case None => fail("Did not get Facebook e-mail error message")
     }
   }

@@ -1,8 +1,8 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{FaceBookAuthDialog, SignInPage, ContainerWithSigninModulePage, FrontPage}
-import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
+import com.gu.identity.integration.test.pages.{FrontPage, ContainerWithSigninModulePage, FaceBookAuthDialog, SignInPage}
+import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
 import com.gu.integration.test.steps.{BaseSteps, SocialNetworkSteps}
 import org.openqa.selenium.WebDriver
@@ -114,9 +114,10 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
           .clickEditAccountDetailsTab().getEmailAddress()
 
         signInEmail should be(newEmail) //confirms facebook sign in was against correctly changed email
-}
-      scenarioWeb("should be asked to re-request e-mail permissions after denying them the first time") { implicit driver: WebDriver =>
-        val facebookUser = SocialNetworkSteps().createNewFacebookTestUser()
+    }
+
+    scenarioFacebook("should be asked to re-request e-mail permissions after denying them the first time") {
+      implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
@@ -125,12 +126,11 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SocialNetworkSteps().checkUserGotFacebookEmailError(registerPage)
         SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
         val signinPage = new SignInPage()
-        signinPage.clickFaceBookSignInButton(false)
+        signinPage.clickFaceBookSignInButton(waitForFacebookEmailElement = false)
         val requestPermissionsDialog = new FaceBookAuthDialog()
         requestPermissionsDialog.clickConfirmButton()
         BaseSteps().goToStartPage()
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
-        SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     }
   }
   feature("Registration and sign-in using Google") {
