@@ -72,7 +72,7 @@ class EditAccountDetailsModule(implicit driver: WebDriver) extends UserFormPage 
   //The reason for these seemingly uneccessary getters is because there is some principle which says you cannot expose
   //web elements directly
   def getEmailAddress() = {
-    emailField.getText
+    emailField.getAttribute("value")
   }
 
   def getFirstName() = {

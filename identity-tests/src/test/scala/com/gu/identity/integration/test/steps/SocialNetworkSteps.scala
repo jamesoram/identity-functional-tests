@@ -1,11 +1,10 @@
 package com.gu.integration.test.steps
 
-import com.gu.automation.support.{LocalStorageManager, Config, TestLogging}
-import com.gu.identity.integration.test.pages.{EditProfilePage, FrontPage, RegisterPage, FacebookParentPage}
-import com.gu.identity.integration.test.util.facebook.{FacebookTestUserService, AccessToken, FacebookTestUser}
+import com.gu.automation.support.{Config, LocalStorageManager, TestLogging}
+import com.gu.identity.integration.test.pages.{EditProfilePage, FacebookParentPage, FrontPage, RegisterPage}
+import com.gu.identity.integration.test.util.facebook.{AccessToken, FacebookTestUser, FacebookTestUserService}
 import com.gu.integration.test.util.PageLoader._
-import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
-import org.openqa.selenium.{By, WebDriver}
+import org.openqa.selenium.WebDriver
 import org.scalatest.Matchers
 
 case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging with Matchers {
@@ -46,7 +45,7 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
 
   def checkUserGotAutoSignInBanner(frontPage: FrontPage) = {
     frontPage.getSiteMessageText() match {
-      case Some(text: String) => text should include ("signed into the Guardian using Facebook")
+      case Some(text: String) => text should include ("signed in to the Guardian using Facebook")
       case _ => fail("Did not get auto sign in banner")
     }
   }
