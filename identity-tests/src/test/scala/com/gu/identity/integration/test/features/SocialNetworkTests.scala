@@ -4,6 +4,7 @@ import com.gu.automation.core.GivenWhenThen
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
 import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage}
 import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
+import com.gu.identity.integration.test.tags.{Unstable, Large}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
 import com.gu.integration.test.steps.{BaseSteps, SocialNetworkSteps}
 import org.openqa.selenium.WebDriver
@@ -23,7 +24,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
 
 
   feature("Registration and sign-in using Facebook") {
-    scenarioFacebook("should be able to register using Facebook") { implicit driver: WebDriver =>
+    scenarioFacebook("should be able to register using Facebook", Large) { implicit driver: WebDriver =>
       implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
@@ -34,7 +35,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
         SignInSteps().checkThatLoginCookieExists()
     }
 
-    scenarioFacebook("should get an error message if e-mail permissions are missing") { implicit driver: WebDriver =>
+    scenarioFacebook("should get an error message if e-mail permissions are missing", Large, Unstable) {
+      implicit driver: WebDriver =>
       implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
@@ -45,7 +47,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
         SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
     }
 
-    scenarioFacebook("should be auto signed in if registered and logged into Facebook") { implicit driver: WebDriver =>
+    scenarioFacebook("should be auto signed in if registered and logged into Facebook", Large) {
+      implicit driver: WebDriver =>
       implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         val frontPage = new FrontPage()
@@ -62,7 +65,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
 
-    scenarioFacebook("should be asked to re-authenticate when editing profile after logging in with Facebook") {
+    scenarioFacebook("should be asked to re-authenticate when editing profile after logging in with Facebook", Large) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
@@ -76,7 +79,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
         SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
     }
 
-    scenarioFacebook("should stay on Facebook when entering wrong Facebook password during re-authentication") {
+    scenarioFacebook("should stay on Facebook when entering wrong Facebook password during re-authentication", Large) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
@@ -90,7 +93,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
         SocialNetworkSteps().checkUserIsOnFacebook()
     }
 
-    scenarioFacebook("Social user can change email on profile and still sign in") { implicit driver: WebDriver =>
+    scenarioFacebook("Social user can change email on profile and still sign in", Large, Unstable) {
+      implicit driver: WebDriver =>
       implicit facebookUser: FacebookTestUser =>
         val newEmail = System.currentTimeMillis() + "changed@changed.com"
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
@@ -120,7 +124,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
   }
   feature("Registration and sign-in using Google") {
 
-    scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Google") {
+    scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Google", Large) {
       implicit driver: WebDriver =>
         BaseSteps().goToStartPage()
         SignInSteps().signInUsingGoogle()
