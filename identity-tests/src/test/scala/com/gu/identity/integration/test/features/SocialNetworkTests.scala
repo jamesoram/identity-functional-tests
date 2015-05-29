@@ -1,8 +1,7 @@
 package com.gu.identity.integration.test.features
 
-import com.gu.automation.core.GivenWhenThen
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage}
+import com.gu.identity.integration.test.pages.{FrontPage, ContainerWithSigninModulePage, FaceBookAuthDialog, SignInPage}
 import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
 import com.gu.integration.test.steps.{BaseSteps, SocialNetworkSteps}
@@ -10,7 +9,7 @@ import org.openqa.selenium.WebDriver
 import org.scalatest.Tag
 
 
-class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
+class SocialNetworkTests extends IdentitySeleniumTestSuite {
   //Extends scenarioWeb to include setup/tear down of the test facebook user as there is a hard limit on users allowed
   //BeforeAndAfter was not used as does not work with scenarioWeb
   protected def scenarioFacebook(specText: String, testTags: Tag*)(testFunction: WebDriver => FacebookTestUser => Any) {
@@ -20,7 +19,6 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
       finally SocialNetworkSteps().deleteFacebookTestUser(facebookUser)
     })
   }
-
 
   feature("Registration and sign-in using Facebook") {
     scenarioFacebook("should be able to register using Facebook") { implicit driver: WebDriver =>
@@ -116,6 +114,23 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite with GivenWhenThen{
           .clickEditAccountDetailsTab().getEmailAddress()
 
         signInEmail should be(newEmail) //confirms facebook sign in was against correctly changed email
+    }
+
+    scenarioFacebook("should be asked to re-request e-mail permissions after denying them the first time") {
+      implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
+        SocialNetworkSteps().goToFacebookAsUser(facebookUser)
+        BaseSteps().goToStartPage()
+        val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
+        val authDialog = registerPage.switchToNewSignIn().clickRegisterWithFacebookButton()
+        authDialog.clickEditInformationProvided().clickEmailCheckBox().clickConfirmButton()
+        SocialNetworkSteps().checkUserGotFacebookEmailError(registerPage)
+        SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
+        val signinPage = new SignInPage()
+        signinPage.clickFaceBookSignInButton(waitForFacebookEmailElement = false)
+        val requestPermissionsDialog = new FaceBookAuthDialog()
+        requestPermissionsDialog.clickConfirmButton()
+        BaseSteps().goToStartPage()
+        SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
   }
   feature("Registration and sign-in using Google") {
