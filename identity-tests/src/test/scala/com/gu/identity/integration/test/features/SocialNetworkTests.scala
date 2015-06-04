@@ -1,7 +1,7 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{FrontPage, ContainerWithSigninModulePage, FaceBookAuthDialog, SignInPage}
+import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage}
 import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
 import com.gu.integration.test.steps.{BaseSteps, SocialNetworkSteps}
@@ -116,6 +116,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         signInEmail should be(newEmail) //confirms facebook sign in was against correctly changed email
     }
 
+    /* REMOVED TEST AS UNSTABLE DURING AUTOMATED TEST RUNS
     scenarioFacebook("should be asked to re-request e-mail permissions after denying them the first time") {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
@@ -132,6 +133,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         BaseSteps().goToStartPage()
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
+    */
+
   }
   feature("Registration and sign-in using Google") {
 
