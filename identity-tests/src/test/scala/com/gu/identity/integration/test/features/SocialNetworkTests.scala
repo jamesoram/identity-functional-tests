@@ -1,7 +1,7 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage}
+import com.gu.identity.integration.test.pages.{FaceBookAuthDialog, SignInPage, ContainerWithSigninModulePage, FrontPage}
 import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
 import com.gu.identity.integration.test.tags.{Unstable, Large}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
@@ -100,7 +100,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
         registerPage.switchToNewSignIn().clickRegisterWithFacebookButton().clickConfirmButton()
-        val editAccountDetailsPage = UserSteps().goToEditAccountPage(new ContainerWithSigninModulePage()).clickConfirmWithFacebookButton
+        val editAccountDetailsPage = UserSteps()
+          .goToEditAccountPage(new ContainerWithSigninModulePage()).clickConfirmWithFacebookButton
           .enterPassword(facebookUser.password.get).clickContinueButton().clickEditAccountDetailsTab()
 
         editAccountDetailsPage.enterEmailAddress(newEmail)
@@ -120,8 +121,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         signInEmail should be(newEmail) //confirms facebook sign in was against correctly changed email
     }
 
-    /* REMOVED TEST AS UNSTABLE DURING AUTOMATED TEST RUNS
-    scenarioFacebook("should be asked to re-request e-mail permissions after denying them the first time") {
+
+    scenarioFacebook("should be asked to re-request e-mail permissions after denying them the first time", Large, Unstable) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
@@ -137,7 +138,6 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         BaseSteps().goToStartPage()
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
-    */
 
   }
   feature("Registration and sign-in using Google") {
