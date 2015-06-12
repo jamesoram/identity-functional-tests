@@ -1,9 +1,9 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{FaceBookAuthDialog, SignInPage, ContainerWithSigninModulePage, FrontPage}
-import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps}
-import com.gu.identity.integration.test.tags.{Unstable, Large}
+import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FaceBookAuthDialog, FrontPage, SignInPage}
+import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
+import com.gu.identity.integration.test.tags.{CoreTest, OptionalTest, Unstable}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
 import com.gu.integration.test.steps.{BaseSteps, SocialNetworkSteps}
 import org.openqa.selenium.WebDriver
@@ -22,8 +22,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
   }
 
   feature("Registration and sign-in using Facebook") {
-    scenarioFacebook("should be able to register using Facebook", Large) { implicit driver: WebDriver =>
-      implicit facebookUser: FacebookTestUser =>
+    scenarioFacebook("should be able to register using Facebook", OptionalTest) {
+      implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
@@ -33,9 +33,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SignInSteps().checkThatLoginCookieExists()
     }
 
-    scenarioFacebook("should get an error message if e-mail permissions are missing", Large, Unstable) {
-      implicit driver: WebDriver =>
-      implicit facebookUser: FacebookTestUser =>
+    scenarioFacebook("should get an error message if Facebook e-mail permissions are missing", OptionalTest, Unstable) {
+      implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
@@ -45,9 +44,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
     }
 
-    scenarioFacebook("should be auto signed in if registered and logged into Facebook", Large) {
-      implicit driver: WebDriver =>
-      implicit facebookUser: FacebookTestUser =>
+    scenarioFacebook("should be auto signed in if registered and logged into Facebook", CoreTest) {
+      implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         val frontPage = new FrontPage()
         BaseSteps().goToStartPage()
@@ -63,7 +61,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
 
-    scenarioFacebook("should be asked to re-authenticate when editing profile after logging in with Facebook", Large) {
+    scenarioFacebook("should be asked to re-authenticate when editing profile after logging in with Facebook", OptionalTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
@@ -77,7 +75,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
     }
 
-    scenarioFacebook("should stay on Facebook when entering wrong Facebook password during re-authentication", Large) {
+    scenarioFacebook("should stay on Facebook when entering wrong Facebook password during re-authentication", OptionalTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
@@ -91,9 +89,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SocialNetworkSteps().checkUserIsOnFacebook()
     }
 
-    scenarioFacebook("Social user can change email on profile and still sign in", Large, Unstable) {
-      implicit driver: WebDriver =>
-      implicit facebookUser: FacebookTestUser =>
+    scenarioFacebook("Facebook user can change email on profile and still sign in", OptionalTest, Unstable) {
+      implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         val newEmail = System.currentTimeMillis() + "changed@changed.com"
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
 
@@ -122,7 +119,8 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
     }
 
 
-    scenarioFacebook("should be asked to re-request e-mail permissions after denying them the first time", Large, Unstable) {
+    scenarioFacebook("should be asked to re-request Facebook e-mail permissions after denying them the first time",
+      OptionalTest, Unstable) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
@@ -142,7 +140,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
   }
   feature("Registration and sign-in using Google") {
 
-    scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Google", Large) {
+    scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Google", OptionalTest) {
       implicit driver: WebDriver =>
         BaseSteps().goToStartPage()
         SignInSteps().signInUsingGoogle()
