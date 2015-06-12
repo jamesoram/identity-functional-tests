@@ -84,6 +84,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     val signInPage = SignInSteps().clickSignInLink()
     val googleSignInPage = signInPage.clickGoogleSignInButton()
     googleSignInPage.enterEmail(Config().getUserValue("googleEmail"))
+    googleSignInPage.nextButton.click()
     googleSignInPage.enterPwd(Config().getUserValue("googlePwd"))
     googleSignInPage.loginInButton.click()
   }
