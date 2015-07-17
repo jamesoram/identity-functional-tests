@@ -20,7 +20,7 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       val validationErrors = UserSteps().createUserWithUserName(get("loginName")).left.value
       validationErrors.size should be(2)
 
-      validationErrors.exists(_.errorText.contains("username")) should be (true)
+      validationErrors.exists(_.errorText.contains("username")) should be (right = true)
     }
 
     scenarioWeb("should be able to change email address", CoreTest) { implicit driver: WebDriver =>
@@ -37,7 +37,7 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       val invalidEmail = generateRandomAlphaNumericString(7)
       val validationErrors = UserSteps().changeEmailTo(invalidEmail, editAccountDetailsModule).left.value
       validationErrors.size should be(1)
-      validationErrors.head.errorText.contains("email") should be(true)
+      validationErrors.head.errorText.contains("email") should be(right = true)
     }
 
     scenarioWeb("should be able to set and change first and last name", OptionalTest) { implicit driver: WebDriver =>

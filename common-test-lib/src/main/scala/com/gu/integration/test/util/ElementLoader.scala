@@ -10,13 +10,14 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 object ElementLoader extends TestLogging {
 
   val TestAttributeName = "data-test-id"
+  val DataLinkAttributeName = "data-link-name"
 
   def notDisplayed(elementsToCheck: List[WebElement]): List[WebElement] = {
-    elementsToCheck.filter(element => !element.isDisplayed())
+    elementsToCheck.filter(element => !element.isDisplayed)
   }
 
   def displayed(elementsToCheck: List[WebElement]): List[WebElement] = {
-    elementsToCheck.filter(element => element.isDisplayed())
+    elementsToCheck.filter(element => element.isDisplayed)
   }
 
   /**
@@ -25,6 +26,10 @@ object ElementLoader extends TestLogging {
    */
   def findByTestAttribute(testAttributeValue: String, contextElement: Option[SearchContext] = None)(implicit driver: WebDriver): WebElement = {
     contextElement.getOrElse(driver).findElement(byTestAttributeId(testAttributeValue))
+  }
+
+  def findByDataLinkAttribute(testAttributeValue: String, contextElement: Option[SearchContext] = None)(implicit driver: WebDriver): WebElement = {
+    contextElement.getOrElse(driver).findElement(byDataLinkAttributeName(testAttributeValue))
   }
 
   /**
@@ -37,6 +42,10 @@ object ElementLoader extends TestLogging {
 
   private def byTestAttributeId(testAttributeValue: String): org.openqa.selenium.By = {
     By.cssSelector(s"[$TestAttributeName=$testAttributeValue]")
+  }
+
+  private def byDataLinkAttributeName(name: String): org.openqa.selenium.By = {
+    By.cssSelector(s"[$DataLinkAttributeName=$name]")
   }
 
   /**
@@ -55,7 +64,7 @@ object ElementLoader extends TestLogging {
    */
   def displayedElements(elements: List[WebElement], timeoutInSeconds: Int = 3, maxElements: Int = Int.MaxValue)(implicit driver: WebDriver): List[WebElement] = {
     elements.view
-      .filter(element => waitUntil(visibilityOf(element), timeoutInSeconds) && element.isDisplayed())
+      .filter(element => waitUntil(visibilityOf(element), timeoutInSeconds) && element.isDisplayed)
       .take(maxElements)
       .toList
   }

@@ -2,15 +2,21 @@ package com.gu.identity.integration.test.pages
 
 import com.gu.integration.test.util.ElementLoader._
 import com.gu.integration.test.util.WebElementEnhancer._
-import org.openqa.selenium.{By, JavascriptExecutor, WebDriver, WebElement}
+import org.openqa.selenium.{By, WebDriver, WebElement}
 
 class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   private def emailInputField: WebElement = findByTestAttribute("reg-email")
+
   private def userNameInputField: WebElement = findByTestAttribute("reg-username")
+
   private def firstNameInputField: WebElement = findByTestAttribute("reg-first-name")
+
   private def lastNameInputField: WebElement = findByTestAttribute("reg-second-name")
+
   private def pwdInputField: WebElement = findByTestAttribute("reg-pwd")
+
   private def createButton: WebElement = findByTestAttribute("create-user-button")
+
   private def registerWithFacebookButton: WebElement = findByTestAttribute("facebook-sign-in")
 
   def enterEmail(email: String) = {
@@ -45,8 +51,8 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
   }
 
   def clickRegisterWithFacebookButton(): FaceBookAuthDialog = {
-    driver.asInstanceOf[JavascriptExecutor].executeScript("arguments[0].scrollIntoView(true);", registerWithFacebookButton);
-    Thread sleep 500
+//    driver.asInstanceOf[JavascriptExecutor].executeScript("arguments[0].scrollIntoView(true);", registerWithFacebookButton); //workaround for large ads
+//    Thread sleep 500
     registerWithFacebookButton.click()
     new FaceBookAuthDialog()
   }

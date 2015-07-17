@@ -13,12 +13,12 @@ class TermsOfServiceTests extends IdentitySeleniumTestSuite {
       val minimumTosContentSize = 100
       val tosContent: String = tosPage.getContent()
 
-      tosContent.size should be > minimumTosContentSize
+      tosContent.length should be > minimumTosContentSize
 
-      tosContent.contains("Terms and conditions") should be (true)
-      tosContent.contains("Guardian") should be (true)
-      tosContent.contains("theguardian.com") should be (true)
-      tosContent.contains("disclaimer") should be (true)
+      tosContent.contains("Terms and conditions") should be (right = true)
+      tosContent.contains("Guardian") should be (right = true)
+      tosContent.contains("theguardian.com") should be (right = true)
+      tosContent.contains("disclaimer") should be (right = true)
     }
   }
 }
