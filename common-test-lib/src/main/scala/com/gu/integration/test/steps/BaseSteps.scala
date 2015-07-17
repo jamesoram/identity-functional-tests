@@ -16,6 +16,7 @@ case class BaseSteps(implicit driver: WebDriver) extends TestLogging with Matche
 
   def goToTermsOfServicePage(useBetaRedirect: Boolean = false): TermsOfServicePage = {
     goToStartPage()
+    Thread.sleep(500)
     //    lazy val tosPage = new TermsOfServicePage()
     //    goTo(tosPage, fromRelativeUrl("/../help/terms-of-service"))
     ElementLoader.findByDataLinkAttribute("terms").click()
