@@ -1,14 +1,14 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.tags.CoreTest
+import com.gu.identity.integration.test.tags.Unstable
 import com.gu.integration.test.steps.BaseSteps
 import org.openqa.selenium.WebDriver
 
 class TermsOfServiceTests extends IdentitySeleniumTestSuite {
 
   feature("Terms of Service feature") {
-    scenarioWeb("should not be empty or trivial", CoreTest) { implicit driver: WebDriver =>
+    scenarioWeb("should not be empty or trivial", Unstable) { implicit driver: WebDriver =>
       val tosPage = BaseSteps().goToTermsOfServicePage()
       val minimumTosContentSize = 100
       val tosContent: String = tosPage.getContent()
