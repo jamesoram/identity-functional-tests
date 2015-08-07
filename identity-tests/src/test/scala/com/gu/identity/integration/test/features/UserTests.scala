@@ -1,12 +1,13 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, EditAccountDetailsModule}
+import com.gu.identity.integration.test.pages.{EmailVerificationPage, ContainerWithSigninModulePage, EditAccountDetailsModule}
 import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
 import com.gu.identity.integration.test.tags.{CoreTest, OptionalTest}
 import com.gu.identity.integration.test.util.User
 import com.gu.identity.integration.test.util.User._
 import com.gu.integration.test.steps.BaseSteps
+import com.gu.integration.test.util.PageLoader
 import com.gu.integration.test.util.UserConfig._
 import org.openqa.selenium.WebDriver
 import org.scalatest.EitherValues
@@ -21,6 +22,14 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       validationErrors.size should be(2)
 
       validationErrors.exists(_.errorText.contains("username")) should be (right = true)
+    }
+
+    scenarioWeb("should be able to go back to return URL after registration") { implicit driver: WebDriver =>
+      val subPath = "/sport"
+      val expectedReturnUrl = PageLoader.turnOfPopups(PageLoader.frontsBaseUrl + subPath)
+      UserSteps().createRandomBasicUser(Some(subPath)).right.value
+      val emailVerificationPage = new EmailVerificationPage()
+      UserSteps().checkUserGotCorrectReturnUrl(emailVerificationPage, expectedReturnUrl)
     }
 
     scenarioWeb("should be able to change email address", CoreTest) { implicit driver: WebDriver =>
