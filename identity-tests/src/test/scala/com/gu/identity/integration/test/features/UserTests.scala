@@ -4,7 +4,7 @@ import com.gu.identity.integration.test.IdentitySeleniumTestSuite
 import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, EditAccountDetailsModule}
 import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
 import com.gu.identity.integration.test.tags.{CoreTest, OptionalTest}
-import com.gu.identity.integration.test.util.User
+import com.gu.identity.integration.test.util.{FormError, User}
 import com.gu.identity.integration.test.util.User._
 import com.gu.integration.test.steps.BaseSteps
 import com.gu.integration.test.util.UserConfig._
@@ -17,10 +17,8 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
   feature("Create and changing a User") {
 
     scenarioWeb("should not be able to create user with existing user name", CoreTest) { implicit driver: WebDriver =>
-      val validationErrors = UserSteps().createUserWithUserName(get("loginName")).left.value
-      validationErrors.size should be(2)
-
-      validationErrors.exists(_.errorText.contains("username")) should be (right = true)
+      val validationErrors : List[FormError] = UserSteps().createUserWithUserName(get("loginName")).left.value
+      validationErrors should contain (FormError("This username has already been taken"))
     }
 
     scenarioWeb("should be able to change email address", CoreTest) { implicit driver: WebDriver =>
