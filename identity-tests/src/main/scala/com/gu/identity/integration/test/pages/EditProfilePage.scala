@@ -29,9 +29,9 @@ class EditProfilePage(implicit driver: WebDriver) extends ParentPage {
     new EditAccountDetailsModule()
   }
 
-  def getHeaderText(): Option[String] = {
+  def getHeaderText: Option[String] = {
     pageHeader match {
-      case Some(element: WebElement) => Some(element.getText())
+      case Some(element: WebElement) => Some(element.getText)
       case None => None
     }
   }

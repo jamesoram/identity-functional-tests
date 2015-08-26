@@ -16,12 +16,12 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
 
   feature("Create and changing a User") {
 
-    scenarioWeb("should not be able to create user with existing user name", CoreTest) { implicit driver: WebDriver =>
+    scenarioWeb("U1: should not be able to create user with existing user name", CoreTest) { implicit driver: WebDriver =>
       val validationErrors : List[FormError] = UserSteps().createUserWithUserName(get("loginName")).left.value
       validationErrors should contain (FormError("This username has already been taken"))
     }
 
-    scenarioWeb("should be able to change email address", CoreTest) { implicit driver: WebDriver =>
+    scenarioWeb("U2: should be able to change email address", CoreTest) { implicit driver: WebDriver =>
       val userBeforeChange: User = UserSteps().createRandomBasicUser().right.value
       val editAccountDetailsModule = UserSteps().checkUserIsLoggedInAndGoToAccountDetails(userBeforeChange)
 
@@ -38,7 +38,7 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       validationErrors.head.errorText.contains("email") should be(right = true)
     }
 
-    scenarioWeb("should be able to set and change first and last name", OptionalTest) { implicit driver: WebDriver =>
+    scenarioWeb("U3: should be able to set and change first and last name", OptionalTest) { implicit driver: WebDriver =>
       val userBeforeChange: User = UserSteps().createRandomBasicUser().right.value
       val editAccountDetailsModule = UserSteps().checkUserIsLoggedInAndGoToAccountDetails(userBeforeChange)
 
@@ -48,7 +48,7 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       userWithChangedName.lastName should not be userBeforeChange.lastName
     }
 
-    scenarioWeb("should be able to set and change address", OptionalTest) { implicit driver: WebDriver =>
+    scenarioWeb("U4: should be able to set and change address", OptionalTest) { implicit driver: WebDriver =>
       val userBeforeChange: User = UserSteps().createRandomBasicUser().right.value
       val editAccountDetailsModule = UserSteps().checkUserIsLoggedInAndGoToAccountDetails(userBeforeChange)
 
@@ -62,7 +62,7 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       userWithChangedAddress.country should not be userBeforeChange.country
     }
 
-    scenarioWeb("should be able to change password", CoreTest) { implicit driver: WebDriver =>
+    scenarioWeb("U5: should be able to change password", CoreTest) { implicit driver: WebDriver =>
       val userBeforeChange: User = UserSteps().createRandomBasicUser().right.value
       val containerWithSignInModulePage = SignInSteps().checkUserIsLoggedIn(userBeforeChange)
 
@@ -77,7 +77,7 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       SignInSteps().checkUserIsLoggedIn(userBeforeChange.userName)
     }
 
-    scenarioWeb("should be able to reset password", CoreTest) { implicit driver: WebDriver =>
+    scenarioWeb("U6: should be able to reset password", CoreTest) { implicit driver: WebDriver =>
       BaseSteps().goToStartPage()
       SignInSteps().signInUsingFaceBook()
       val passwordResetSentPage = UserSteps().requestToResetPassword(new ContainerWithSigninModulePage())

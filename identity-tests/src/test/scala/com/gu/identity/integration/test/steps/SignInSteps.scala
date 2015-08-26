@@ -43,7 +43,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
 
   def checkUserIsLoggedIn(expectedLoginName: String) = {
     logger.step(s"Checking that user is logged in")
-    val loginName = new ContainerWithSigninModulePage().signInModule().signInName.getText
+    val loginName = new ContainerWithSigninModulePage().signInModule().getSignInName
     loginName should include (expectedLoginName)
 
     val loginCookie = getCookie(LoginCookie)

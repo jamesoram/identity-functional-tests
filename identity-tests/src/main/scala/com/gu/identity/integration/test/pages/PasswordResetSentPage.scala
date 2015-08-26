@@ -8,7 +8,7 @@ class PasswordResetSentPage(implicit driver: WebDriver) extends ContainerWithSig
     driver.findElement(By.cssSelector(".identity-title"))
   }
 
- def getMessageText(): String = {
+ def getMessageText: String = {
   message.getText
  }
 
