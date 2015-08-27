@@ -112,7 +112,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SignInSteps().clickSignInWithFacebook()
 
         BaseSteps().goToStartPage()
-        SignInSteps().checkUserIsLoggedIn(facebookUser.fullName) //TODO invesigate failure to sign in
+        SignInSteps().checkUserIsLoggedIn(facebookUser.fullName) //TODO investigate failure to sign in
         BaseSteps().goToStartPage()
         val signInEmail = UserSteps().goToEditAccountPage(new ContainerWithSigninModulePage())
           .clickEditAccountDetailsTab().getEmailAddress
@@ -138,7 +138,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         val requestPermissionsDialog = new FaceBookAuthDialog()
         requestPermissionsDialog.clickConfirmButton(facebookUser.email.get, facebookUser.password.get)
         BaseSteps().goToStartPage()
-        SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)  //TODO invesigate failure to sign in
+        SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)  //TODO investigate failure to sign in
     }
 
   }
