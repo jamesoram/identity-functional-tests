@@ -1,11 +1,10 @@
 package com.gu.identity.integration.test.pages
 
-import com.gu.integration.test.pages.common.ParentPage
 import com.gu.integration.test.util.ElementLoader._
 import org.openqa.selenium.support.ui.ExpectedConditions._
 import org.openqa.selenium.{By, WebDriver, WebElement}
 
-class SignInPage(implicit driver: WebDriver) extends ParentPage {
+class SignInPage(implicit driver: WebDriver) {
 
   private def emailInputField: WebElement = findByTestAttribute("signin-email")
   private def pwdInputField: WebElement = findByTestAttribute("signin-pwd")
