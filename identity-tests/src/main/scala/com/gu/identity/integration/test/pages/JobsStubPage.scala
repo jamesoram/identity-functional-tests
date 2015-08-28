@@ -9,10 +9,10 @@ class JobsStubPage(implicit  driver: WebDriver) extends ParentPage {
 
   val loginLink: WebElement = findByDataLinkAttribute("Signin")
 
-  def clickLogin(): SignInPage = {
+  def clickLogin(): SignInWithJobsPage = {
     waitUntil(visibilityOf(loginLink), 10)
     loginLink.click()
-    new SignInPage
+    new SignInWithJobsPage
   }
 
 }
