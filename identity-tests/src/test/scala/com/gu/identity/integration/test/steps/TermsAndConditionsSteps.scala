@@ -12,8 +12,6 @@ case class TermsAndConditionsSteps(implicit driver: WebDriver) extends TestLoggi
   def goToJobsSite: JobsStubPage = {
     logger.step(s"I am on stub jobs page at url: $jobsStub")
     driver.navigate().to(jobsStub)
-    // Wait for javascript to execute
-    Thread.sleep(500)
     new JobsStubPage()
   }
 
