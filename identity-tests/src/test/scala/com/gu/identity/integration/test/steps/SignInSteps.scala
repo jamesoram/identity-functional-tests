@@ -1,7 +1,7 @@
 package com.gu.identity.integration.test.steps
 
-import com.gu.automation.support.{CookieManager, Config, TestLogging}
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, SignInPage}
+import com.gu.automation.support.{Config, CookieManager, TestLogging}
+import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, RegisterPage, SignInPage}
 import com.gu.identity.integration.test.util.User
 import com.gu.integration.test.steps.BaseSteps
 import com.gu.integration.test.util.CookieUtil._
@@ -26,7 +26,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     signInWith(Config().getLoginEmail(), Config().getLoginPassword())
   }
 
-  def signInWith(email:String, pwd:String) = {
+  def signInWith(email: String, pwd: String) = {
     logger.step("Signing in using credentials")
     val signInPage = SignInSteps().clickSignInLink()
     signInPage.enterEmail(email)
@@ -44,7 +44,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
   def checkUserIsLoggedIn(expectedLoginName: String) = {
     logger.step(s"Checking that user is logged in")
     val loginName = new ContainerWithSigninModulePage().signInModule().getSignInName
-    loginName should include (expectedLoginName)
+    loginName should include(expectedLoginName)
 
     val loginCookie = getCookie(LoginCookie)
     loginCookie.getValue should not be empty
@@ -65,9 +65,13 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     faceBookSignInPage.loginInButton.click()
   }
 
-  def clickSignInWithFacebook() = {
-    new SignInPage().clickResignInWithFacebook
-    this
+  def clickSignInWithFacebook(emailAllowed: Boolean = true): Either[SignInPage, RegisterPage] = {
+    //user sent down either path if the user has allowed the email or not
+    if (emailAllowed) {
+      Left(new SignInPage().clickResignInWithFacebook)
+    } else {
+      Right(new SignInPage().clickSignInWithFaceBookNoEmail)
+    }
   }
 
   def signInUsingNewFaceBook() = {
@@ -100,7 +104,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     loginName should not be expectedLoginName
 
     val loginCookie = getCookie(LoginCookie)
-    loginCookie should be (null)
+    loginCookie should be(null)
   }
 
   def clearLoginCookies() = {

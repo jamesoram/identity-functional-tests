@@ -36,6 +36,7 @@ class FaceBookAuthDialog(implicit driver: WebDriver) extends ParentPage {
   def clickEditInformationProvided(email: String, pwd: String) = {
     userSignedInToFacebook(email, pwd) //workaround
     editInformationProvided.click()
+    waitForPageToLoad
     this
   }
 

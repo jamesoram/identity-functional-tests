@@ -30,6 +30,7 @@ class SignInModule(implicit driver: WebDriver) extends ParentPage {
 
   def clickSignInLink(): SignInPage = {
     new Actions(driver).moveToElement(signInLink).perform()
+    waitForPageToLoad
     var count: Int = 0
     while (count < 4) {
       try {
@@ -40,11 +41,13 @@ class SignInModule(implicit driver: WebDriver) extends ParentPage {
       }
       count = count + 1
     }
+    waitForPageToLoad
     new SignInPage()
   }
 
   def clickSignInLinkWhenLoggedIn(): ProfileNavMenu = {
     //workaround for stale element caused by jittery javascript
+    waitForPageToLoad
     var count: Int = 0
     while (count < 4) {
       try {
@@ -55,7 +58,7 @@ class SignInModule(implicit driver: WebDriver) extends ParentPage {
       }
       count = count + 1
     }
-
+    waitForPageToLoad
     new ProfileNavMenu
   }
 }

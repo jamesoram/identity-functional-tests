@@ -52,6 +52,7 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
 
   def clickRegisterWithFacebookButton(): FaceBookAuthDialog = {
     //workaround for stale element caused by jittery javascript
+    waitForPageToLoad
     var count: Int = 0
     while (count < 4) {
       try {
