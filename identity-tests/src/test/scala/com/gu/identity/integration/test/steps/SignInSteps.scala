@@ -90,7 +90,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     googleSignInPage.enterEmail(Config().getUserValue("googleEmail"))
     googleSignInPage.nextButton.click()
     googleSignInPage.enterPwd(Config().getUserValue("googlePwd"))
-    googleSignInPage.loginInButton.click()
+    googleSignInPage.clickLogInButton
   }
 
   def signOut(pageWithSignInModule: ContainerWithSigninModulePage) = {
