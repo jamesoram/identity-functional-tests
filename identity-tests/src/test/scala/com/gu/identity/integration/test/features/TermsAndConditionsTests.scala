@@ -9,7 +9,7 @@ class TermsAndConditionsTests extends IdentitySeleniumTestSuite {
 
 
   feature("T&C's feature") {
-    scenarioWeb("should be to agree with Jobs T&C's when logging-in from jobs", CoreTest) { implicit driver: WebDriver =>
+    scenarioWeb("should be shown Jobs T&C's when logging-in from jobs", CoreTest) { implicit driver: WebDriver =>
       val signinPage = TermsAndConditionsSteps().goToJobsSite.clickLogin()
       TermsAndConditionsSteps().checkTermsVisible(signinPage)
     }
