@@ -5,8 +5,6 @@ import com.gu.identity.integration.test.pages._
 import com.gu.identity.integration.test.util.User._
 import com.gu.identity.integration.test.util.{FormError, User}
 import com.gu.integration.test.steps.BaseSteps
-import com.gu.integration.test.util.CookieUtil._
-import com.gu.integration.test.util.ElementLoader._
 import com.gu.integration.test.util.PageLoader._
 import com.gu.integration.test.util.UserConfig._
 import org.openqa.selenium.WebDriver
@@ -64,11 +62,11 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
 
     waitForPageToLoad
 
-    val userFormErrors = editAccountDetailsModule.getAllValidationFormErrors()
+    val userFormErrors = editAccountDetailsModule.getAllValidationFormErrors
     if (userFormErrors.nonEmpty) {
       Left(userFormErrors)
     } else {
-      Right(editAccountDetailsModule.getEmailAddress())
+      Right(editAccountDetailsModule.getEmailAddress)
     }
   }
 
@@ -80,7 +78,7 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
 
     waitForPageToLoad
 
-    editAccountDetailsModule.getAllValidationFormErrors() should be('empty)
+    editAccountDetailsModule.getAllValidationFormErrors should be('empty)
     User.fromEditAccountDetailsForm(editAccountDetailsModule)
   }
 
@@ -96,7 +94,7 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
 
     waitForPageToLoad
 
-    editAccountDetailsModule.getAllValidationFormErrors() should be('empty)
+    editAccountDetailsModule.getAllValidationFormErrors should be('empty)
     User.fromEditAccountDetailsForm(editAccountDetailsModule)
   }
 
@@ -121,8 +119,8 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
 
     waitForPageToLoad
 
-    changePwdPage.getAllValidationFormErrors() should be('empty)
-    resetConfirmPage.isPasswordChangeMsgDisplayed()
+    changePwdPage.getAllValidationFormErrors should be('empty)
+    resetConfirmPage.isPasswordChangeMsgDisplayed
 
     waitForPageToLoad
 
@@ -146,7 +144,7 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
   }
 
   def checkUserGotPasswordResetSentMessage(passwordResetSentPage: PasswordResetSentPage) = {
-    passwordResetSentPage.getMessageText() should be ("Now check your email")
+    passwordResetSentPage.getMessageText should be ("Now check your email")
   }
 
   def checkUserGotCorrectReturnUrl(emailVerificationPage: EmailVerificationPage, returnUrl: String) = {
