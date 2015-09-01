@@ -23,10 +23,11 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
     profileNavMenu.clickEditProfile()
   }
 
-  def createRandomBasicUser(): Either[List[FormError], User] = {
+  def createRandomBasicUser(returnUrl: Option[String] = None): Either[List[FormError], User] = {
     logger.step("Creating random user")
-    BaseSteps().goToStartPage(useBetaRedirect = false)
+    BaseSteps().goToStartPage(useBetaRedirect = false, returnUrl)
     val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
+
     val userOrFormErrors = RegisterSteps().registerNewTempUser(registerPage)
     userOrFormErrors
   }
@@ -146,6 +147,10 @@ case class UserSteps(implicit driver: WebDriver) extends TestLogging with Matche
 
   def checkUserGotPasswordResetSentMessage(passwordResetSentPage: PasswordResetSentPage) = {
     passwordResetSentPage.getMessageText() should be ("Now check your email")
+  }
+
+  def checkUserGotCorrectReturnUrl(emailVerificationPage: EmailVerificationPage, returnUrl: String) = {
+    emailVerificationPage.getCompleteRegistrationButtonLink should be (returnUrl)
   }
 
 }
