@@ -4,7 +4,7 @@ import com.gu.integration.test.util.ElementLoader._
 import com.gu.integration.test.util.WebElementEnhancer._
 import org.openqa.selenium.{By, WebDriver, WebElement}
 
-class RegisterPage(implicit driver: WebDriver) extends UserFormPage {
+class RegisterPage(implicit driver: WebDriver) extends UserFormPage with ThirdPartyConditions with SocialSignInButtons {
   private def emailInputField: WebElement = findByTestAttribute("reg-email")
 
   private def userNameInputField: WebElement = findByTestAttribute("reg-username")
