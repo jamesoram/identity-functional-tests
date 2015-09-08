@@ -32,16 +32,6 @@ class SignInPage(implicit driver: WebDriver) extends ParentPage with ThirdPartyC
     new FaceBookSignInPage()
   }
 
-  def clickResignInWithFacebook = {
-    faceBookSignInButton.click()
-    this
-  }
-
-  def clickGoogleSignInButton(): GoogleSignInPage = {
-    googleSignInButton.click()
-    new GoogleSignInPage()
-  }
-
   def clickSignInWithFaceBookNoEmail = {
     clickResignInWithFacebook
     new RegisterPage()

@@ -1,7 +1,7 @@
 package com.gu.identity.integration.test.steps
 
 import com.gu.automation.support.{Config, CookieManager, TestLogging}
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, RegisterPage, SignInPage}
+import com.gu.identity.integration.test.pages._
 import com.gu.identity.integration.test.util.User
 import com.gu.integration.test.steps.BaseSteps
 import com.gu.integration.test.util.CookieUtil._
@@ -65,10 +65,10 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     faceBookSignInPage.loginInButton.click()
   }
 
-  def clickSignInWithFacebook(emailAllowed: Boolean = true): Either[SignInPage, RegisterPage] = {
+  def clickSignInWithFacebook(emailAllowed: Boolean = true): Either[FaceBookSignInPage, RegisterPage] = {
     //user sent down either path if the user has allowed the email or not
     if (emailAllowed) {
-      Left(new SignInPage().clickResignInWithFacebook)
+      Left(new SignInPage().clickFaceBookSignInButton())
     } else {
       Right(new SignInPage().clickSignInWithFaceBookNoEmail)
     }
