@@ -26,8 +26,8 @@ object User {
   }
 
   def fromEditAccountDetailsForm(accountDetails: EditAccountDetailsModule): User = {
-    User(accountDetails.getSignInName, accountDetails.getEmailAddress(), None, Option(accountDetails.getFirstName()),
-      Option(accountDetails.getLastName()), Option(accountDetails.getAddressLine1Field), Option(accountDetails.getAddressLine2Field),
+    User(accountDetails.getSignInName, accountDetails.getEmailAddress, None, Option(accountDetails.getFirstName),
+      Option(accountDetails.getLastName), Option(accountDetails.getAddressLine1Field), Option(accountDetails.getAddressLine2Field),
       Option(accountDetails.getTownField), Option(accountDetails.getCountyField), Option(accountDetails.getPostCodeField),
       Option(accountDetails.getSelectedCountry))
   }
