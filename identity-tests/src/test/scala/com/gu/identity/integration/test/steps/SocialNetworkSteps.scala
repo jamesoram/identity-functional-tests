@@ -1,4 +1,4 @@
-package com.gu.integration.test.steps
+package com.gu.identity.integration.test.steps
 
 import com.gu.automation.support.{Config, LocalStorageManager, TestLogging}
 import com.gu.identity.integration.test.pages.{EditProfilePage, FacebookParentPage, FrontPage, RegisterPage}
@@ -32,43 +32,42 @@ case class SocialNetworkSteps(implicit driver: WebDriver) extends TestLogging wi
     facebookSignInPage.enterEmail(facebookTestUser.email.get)
     facebookSignInPage.enterPassword(facebookTestUser.password.get)
     facebookSignInPage.clickLoginButton()
-
     facebookSignInPage
   }
 
   def checkUserGotFacebookEmailError(registerPage: RegisterPage) = {
-    registerPage.getFormErrorText() match {
-      case Some(errorMessage: String) => errorMessage should include ("allow access to your email address")
+    registerPage.getFormErrorText match {
+      case Some(errorMessage: String) => errorMessage should include("allow access to your email address")
       case None => fail("Did not get Facebook e-mail error message")
     }
   }
 
   def checkUserGotAutoSignInBanner(frontPage: FrontPage) = {
-    frontPage.getSiteMessageText() match {
-      case Some(text: String) => text should include ("signed in to the Guardian using Facebook")
+    frontPage.getSiteMessageText match {
+      case Some(text: String) => text should include("signed in to the Guardian using Facebook")
       case _ => fail("Did not get auto sign in banner")
     }
   }
 
   def checkUserGotReAuthenticationMessage(editProfilePage: EditProfilePage) = {
     logger.step("Check that user got asked to re-authenticate")
-    editProfilePage.getHeaderText() match {
-      case Some(text: String) => text should be ("Confirm your identity")
+    editProfilePage.getHeaderText match {
+      case Some(text: String) => text should be("Confirm your identity")
       case _ => fail("Did not get asked to re-authenticate")
     }
   }
 
   def checkUserIsOnEditProfilePage(editProfilePage: EditProfilePage) = {
     logger.step("Check that user is on edit profile page")
-    editProfilePage.getHeaderText() match {
-      case Some(text: String) => text should be ("Edit your profile")
+    editProfilePage.getHeaderText match {
+      case Some(text: String) => text should be("Edit your profile")
       case _ => fail("Is not on edit profile page")
     }
   }
 
   def checkUserIsOnFacebook() = {
     val facebookUrl = "^https://www.facebook.com/(.*)$".r
-    driver.getCurrentUrl() match {
+    driver.getCurrentUrl match {
       case facebookUrl(c) => logger.step("User is on Facebook")
       case _ => fail("User is not on Facebook")
     }

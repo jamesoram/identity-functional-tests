@@ -18,4 +18,9 @@ class GoogleSignInPage(implicit driver: WebDriver) extends ParentPage {
     pwdInputField.sendKeys(pwd)
     this
   }
+
+  def clickLogInButton = {
+    loginInButton.click()
+    waitForPageToLoad // workaround to stabilise too rapid selenium actions
+  }
 }

@@ -1,12 +1,12 @@
 package com.gu.identity.integration.test.features
 
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FaceBookAuthDialog, FrontPage, SignInPage}
-import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
-import com.gu.identity.integration.test.tags.{CoreTest, OptionalTest, Unstable}
+import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage}
+import com.gu.identity.integration.test.steps.{SignInSteps, SocialNetworkSteps, UserSteps}
+import com.gu.identity.integration.test.tags.{CoreTest, OptionalTest, SocialTest}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
-import com.gu.integration.test.steps.{BaseSteps, SocialNetworkSteps}
-import org.openqa.selenium.WebDriver
+import com.gu.integration.test.steps.BaseSteps
+import org.openqa.selenium.{JavascriptExecutor, WebDriver}
 import org.scalatest.Tag
 
 
@@ -22,36 +22,38 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
   }
 
   feature("Registration and sign-in using Facebook") {
-    scenarioFacebook("should be able to register using Facebook", OptionalTest) {
+    scenarioFacebook("SN1: should be able to register using Facebook", OptionalTest, SocialTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
         val authDialog = registerPage.clickRegisterWithFacebookButton()
-        authDialog.clickConfirmButton()
+        authDialog.clickConfirmButton(facebookUser.email.get, facebookUser.password.get)
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
         SignInSteps().checkThatLoginCookieExists()
     }
 
-    scenarioFacebook("should get an error message if Facebook e-mail permissions are missing", OptionalTest, Unstable) {
+    scenarioFacebook("SN2: should get an error message if Facebook e-mail permissions are missing", OptionalTest, SocialTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
+        val email: String = facebookUser.email.get
+        val pwd: String = facebookUser.password.get
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
         val authDialog = registerPage.clickRegisterWithFacebookButton()
-        authDialog.clickEditInformationProvided().clickEmailCheckBox().clickConfirmButton()
+        authDialog.clickEditInformationProvided(email, pwd).clickEmailCheckBox().clickConfirmButton(email, pwd)
         SocialNetworkSteps().checkUserGotFacebookEmailError(registerPage)
         SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
     }
 
-    scenarioFacebook("should be auto signed in if registered and logged into Facebook", CoreTest) {
+    scenarioFacebook("SN3: should be auto signed in if registered and logged into Facebook", CoreTest, SocialTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         val frontPage = new FrontPage()
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
         val authDialog = registerPage.clickRegisterWithFacebookButton()
-        authDialog.clickConfirmButton()
+        authDialog.clickConfirmButton(facebookUser.email.get, facebookUser.password.get)
         SignInSteps().signOut(frontPage)
         val newLogOutTime = System.currentTimeMillis / 1000 - 24 * 3600
         SignInSteps().setSignOutCookieWithTime(newLogOutTime)
@@ -61,13 +63,13 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
 
-    scenarioFacebook("should be asked to re-authenticate when editing profile after logging in with Facebook", OptionalTest) {
+    scenarioFacebook("SN4: should be asked to re-authenticate when editing profile after logging in with Facebook", OptionalTest, SocialTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
         val authDialog = registerPage.clickRegisterWithFacebookButton()
-        authDialog.clickConfirmButton()
+        authDialog.clickConfirmButton(facebookUser.email.get, facebookUser.password.get)
         val editAccountDetailsPage = UserSteps().goToEditProfilePage(new ContainerWithSigninModulePage())
         SocialNetworkSteps().checkUserGotReAuthenticationMessage(editAccountDetailsPage)
         val facebookConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithFacebookButton
@@ -75,13 +77,13 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SocialNetworkSteps().checkUserIsOnEditProfilePage(editProfilePage)
     }
 
-    scenarioFacebook("should stay on Facebook when entering wrong Facebook password during re-authentication", OptionalTest) {
+    scenarioFacebook("SN5: should stay on Facebook when entering wrong Facebook password during re-authentication", OptionalTest, SocialTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
         val authDialog = registerPage.clickRegisterWithFacebookButton()
-        authDialog.clickConfirmButton()
+        authDialog.clickConfirmButton(facebookUser.email.get, facebookUser.password.get)
         val editAccountDetailsPage = UserSteps().goToEditProfilePage(new ContainerWithSigninModulePage())
         SocialNetworkSteps().checkUserGotReAuthenticationMessage(editAccountDetailsPage)
         val facebookConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithFacebookButton
@@ -89,61 +91,62 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SocialNetworkSteps().checkUserIsOnFacebook()
     }
 
-    scenarioFacebook("Facebook user can change email on profile and still sign in", OptionalTest, Unstable) {
+    scenarioFacebook("SN6: Facebook user can change email on profile and still sign in", OptionalTest, SocialTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         val newEmail = System.currentTimeMillis() + "changed@changed.com"
+        val oldEmail: String = facebookUser.email.get
+        val pwd: String = facebookUser.password.get
+        //setup
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
-
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
-        registerPage.clickRegisterWithFacebookButton().clickConfirmButton()
-        val editAccountDetailsPage = UserSteps()
-          .goToEditAccountPage(new ContainerWithSigninModulePage()).clickConfirmWithFacebookButton
-          .enterPassword(facebookUser.password.get).clickContinueButton().clickEditAccountDetailsTab()
-
+        registerPage.clickRegisterWithFacebookButton().clickConfirmButton(oldEmail, pwd)
+        val editAccountDetailsPage = UserSteps().goToEditAccountPage(
+          new ContainerWithSigninModulePage()).clickConfirmWithFacebookButton
+          .enterPassword(pwd).clickContinueButton().clickEditAccountDetailsTab()
+        //change email
         editAccountDetailsPage.enterEmailAddress(newEmail)
         editAccountDetailsPage.saveChanges()
         SignInSteps().signOut(new ContainerWithSigninModulePage())
-
-        BaseSteps().goToStartPage()
         SignInSteps().clickSignInLink()
-        SignInSteps().clickSignInWithFacebook()
-
-        BaseSteps().goToStartPage()
+        SignInSteps().clickSignInWithFacebook().left.get
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
         BaseSteps().goToStartPage()
         val signInEmail = UserSteps().goToEditAccountPage(new ContainerWithSigninModulePage())
-          .clickEditAccountDetailsTab().getEmailAddress()
+          .clickEditAccountDetailsTab().getEmailAddress
 
         signInEmail should be(newEmail) //confirms facebook sign in was against correctly changed email
     }
 
 
-    scenarioFacebook("should be asked to re-request Facebook e-mail permissions after denying them the first time",
-      OptionalTest, Unstable) {
+    scenarioFacebook("SN7: should be asked to re-request Facebook e-mail permissions after denying them the first time",
+      OptionalTest, SocialTest) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
+        val email: String = facebookUser.email.get
+        val pwd: String = facebookUser.password.get
         SocialNetworkSteps().goToFacebookAsUser(facebookUser)
         BaseSteps().goToStartPage()
         val registerPage = SignInSteps().clickSignInLink().clickRegisterNewUserLink()
         val authDialog = registerPage.clickRegisterWithFacebookButton()
-        authDialog.clickEditInformationProvided().clickEmailCheckBox().clickConfirmButton()
+        authDialog.clickEditInformationProvided(email, pwd).clickEmailCheckBox().clickConfirmButton(email, pwd)
         SocialNetworkSteps().checkUserGotFacebookEmailError(registerPage)
-        SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
-        val signinPage = new SignInPage()
-        signinPage.clickFaceBookSignInButton(waitForFacebookEmailElement = false)
-        val requestPermissionsDialog = new FaceBookAuthDialog()
-        requestPermissionsDialog.clickConfirmButton()
         BaseSteps().goToStartPage()
+        SignInSteps().checkUserIsNotLoggedIn(facebookUser.fullName)
+        SignInSteps().clickSignInLink()
+        val registerPage2 = SignInSteps().clickSignInWithFacebook(false).right.get
+        val authDialog2 = registerPage2.clickRegisterWithFacebookButton()
+        authDialog2.clickConfirmButton(email, pwd)
         SignInSteps().checkUserIsLoggedIn(facebookUser.fullName)
     }
 
   }
   feature("Registration and sign-in using Google") {
 
-    scenarioWeb("should be asked to re-authenticate when editing profile after logging in with Google", OptionalTest) {
+    scenarioWeb("SN8: should be asked to re-authenticate when editing profile after logging in with Google", OptionalTest, SocialTest) {
       implicit driver: WebDriver =>
         BaseSteps().goToStartPage()
         SignInSteps().signInUsingGoogle()
+        driver.asInstanceOf[JavascriptExecutor].executeScript("javascript:window.scrollTop") //chrome browser flicks user down to content after signing in with Google+ so scroll back to top
         val editAccountDetailsPage = UserSteps().goToEditProfilePage(new ContainerWithSigninModulePage())
         SocialNetworkSteps().checkUserGotReAuthenticationMessage(editAccountDetailsPage)
         val googleConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithGoogleButton

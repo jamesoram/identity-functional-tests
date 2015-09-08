@@ -23,3 +23,6 @@ import org.scalatest.Tag
   //test is important but the site can handle this feature missing for a short time
   object OptionalTest extends Tag("OptionalTest")
 
+  //test is specifically testing the interaction with external social applications
+  object SocialTest extends Tag("SocialTest")
+
