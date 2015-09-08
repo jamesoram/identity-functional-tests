@@ -4,7 +4,7 @@ import com.gu.automation.support.TestLogging
 import com.gu.identity.integration.test.pages.RegisterPage
 import com.gu.identity.integration.test.util.{FormError, User}
 import com.gu.integration.test.util.PageLoader._
-import org.openqa.selenium.{WebDriver, WebElement}
+import org.openqa.selenium.WebDriver
 import org.scalatest.Matchers
 
 case class RegisterSteps(implicit driver: WebDriver) extends TestLogging with Matchers {
@@ -33,7 +33,7 @@ case class RegisterSteps(implicit driver: WebDriver) extends TestLogging with Ma
 
     waitForPageToLoad
 
-    val userFormErrors = registerPage.getAllValidationFormErrors()
+    val userFormErrors = registerPage.getAllValidationFormErrors
 
     if (userFormErrors.nonEmpty) {
       Left(userFormErrors)
