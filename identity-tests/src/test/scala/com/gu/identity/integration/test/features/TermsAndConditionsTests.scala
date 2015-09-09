@@ -2,9 +2,9 @@ package com.gu.identity.integration.test.features
 
 import com.gu.automation.support.Config
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
-import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps, TermsAndConditionsSteps}
-import com.gu.identity.integration.test.tags.CoreTest
-import com.gu.identity.integration.test.util.{User, UrlParamExtractor}
+import com.gu.identity.integration.test.steps.{TermsAndConditionsSteps, UserSteps}
+import com.gu.identity.integration.test.tags.{CoreTest, Unstable}
+import com.gu.identity.integration.test.util.{UrlParamExtractor, User}
 import com.gu.integration.test.steps.BaseSteps
 import org.openqa.selenium.WebDriver
 
@@ -48,7 +48,8 @@ class TermsAndConditionsTests extends IdentitySeleniumTestSuite {
       TermsAndConditionsSteps().checkJobsTermsVisible(agreePage)
     }
 
-    scenarioWeb("should not see T&C's once user has accepted them", CoreTest) { implicit driver: WebDriver =>
+    scenarioWeb("should not see T&C's once user has accepted them", CoreTest, Unstable) { implicit driver: WebDriver =>
+      //This test works when run manually but fails in webdriver - appears to lose sign in status between sites
       UserSteps().createRandomBasicUser().right.get
       val agreePage = TermsAndConditionsSteps().goToJobsSite.clickLoginAsExistingUser()
       TermsAndConditionsSteps().checkJobsTermsVisible(agreePage)
