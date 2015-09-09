@@ -1,5 +1,6 @@
 package com.gu.identity.integration.test.features
 
+import com.gu.automation.support.Config
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
 import com.gu.identity.integration.test.steps.{UserSteps, SignInSteps, TermsAndConditionsSteps}
 import com.gu.identity.integration.test.tags.CoreTest
@@ -45,6 +46,16 @@ class TermsAndConditionsTests extends IdentitySeleniumTestSuite {
       val user: User = UserSteps().createRandomBasicUser().right.get
       val agreePage = TermsAndConditionsSteps().goToJobsSite.clickLoginAsExistingUser()
       TermsAndConditionsSteps().checkJobsTermsVisible(agreePage)
+    }
+
+    scenarioWeb("should not see T&C's once user has accepted them", CoreTest) { implicit driver: WebDriver =>
+      UserSteps().createRandomBasicUser().right.get
+      val agreePage = TermsAndConditionsSteps().goToJobsSite.clickLoginAsExistingUser()
+      TermsAndConditionsSteps().checkJobsTermsVisible(agreePage)
+      agreePage.clickContinue()
+      BaseSteps().goToStartPage()
+      TermsAndConditionsSteps().goToJobsSite.clickLoginAsApprovedUser()
+      driver.getCurrentUrl should be(Config().getUserValue("jobsStubUrl"))
     }
   }
 

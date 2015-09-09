@@ -28,5 +28,10 @@ class JobsStubPage(implicit  driver: WebDriver) extends ParentPage {
     new AgreePage
   }
 
+  def clickLoginAsApprovedUser(): FrontPage = {
+    waitUntil(visibilityOf(loginLink), 10)
+    loginLink.click()
+    new FrontPage
+  }
 
 }
