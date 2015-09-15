@@ -18,8 +18,8 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
   feature("Create and changing a User") {
 
     scenarioWeb("U1: should not be able to create user with existing user name", CoreTest) { implicit driver: WebDriver =>
-      val validationErrors : List[FormError] = UserSteps().createUserWithUserName(get("loginName")).left.value
-      validationErrors should contain (FormError("This username has already been taken"))
+      val validationErrors: List[FormError] = UserSteps().createUserWithUserName(get("loginName")).left.value
+      validationErrors should contain(FormError("This username has already been taken"))
     }
 
     scenarioWeb("U2: should be able to change email address", CoreTest) { implicit driver: WebDriver =>
@@ -84,8 +84,8 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       val passwordResetSentPage = UserSteps().requestToResetPassword(new ContainerWithSigninModulePage())
       UserSteps().checkUserGotPasswordResetSentMessage(passwordResetSentPage)
     }
-    
-	scenarioWeb("U7: should be able to go back to return URL after registration") { implicit driver: WebDriver =>
+
+    scenarioWeb("U7: should be able to go back to return URL after registration") { implicit driver: WebDriver =>
       val subPath = "/sport"
       val expectedReturnUrl = PageLoader.turnOfPopups(PageLoader.frontsBaseUrl + subPath)
       UserSteps().createRandomBasicUser(Some(subPath)).right.value

@@ -19,6 +19,8 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage with ThirdPa
 
   private def registerWithFacebookButton: WebElement = findByTestAttribute("facebook-sign-in")
 
+  private def completeRegistrationButton: WebElement = findByDataLinkAttribute("Continue")
+
   def enterEmail(email: String) = {
     emailInputField.sendKeys(email)
     this
@@ -73,5 +75,9 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage with ThirdPa
     } catch {
       case _: org.openqa.selenium.NoSuchElementException => None
     }
+  }
+
+  def registrationComplete: Boolean = {
+    completeRegistrationButton.isDisplayed
   }
 }
