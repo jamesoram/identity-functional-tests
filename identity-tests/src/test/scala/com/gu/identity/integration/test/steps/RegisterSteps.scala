@@ -33,8 +33,7 @@ case class RegisterSteps(implicit driver: WebDriver) extends TestLogging with Ma
     if (registerPage.registrationComplete) { //finding the errors takes time so only do so if the button is not visible
       Right(user)
     } else {
-      val userFormErrors = registerPage.getAllValidationFormErrors
-      Left(userFormErrors)
+      Left(registerPage.getAllValidationFormErrors)
     }
   }
 

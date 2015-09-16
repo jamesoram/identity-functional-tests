@@ -2,7 +2,7 @@ package com.gu.identity.integration.test.pages
 
 import com.gu.integration.test.util.ElementLoader._
 import com.gu.integration.test.util.WebElementEnhancer._
-import org.openqa.selenium.{StaleElementReferenceException, By, WebDriver, WebElement}
+import org.openqa.selenium.{By, StaleElementReferenceException, WebDriver, WebElement}
 
 class RegisterPage(implicit driver: WebDriver) extends UserFormPage with ThirdPartyConditions with SocialSignInButtons {
   private def emailInputField: WebElement = findByTestAttribute("reg-email")
@@ -19,7 +19,7 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage with ThirdPa
 
   private def registerWithFacebookButton: WebElement = findByTestAttribute("facebook-sign-in")
 
-  private def completeRegistrationButton: WebElement = findByDataLinkAttribute("Continue")
+  private def registerCompleteText: String = "Continue"
 
   def enterEmail(email: String) = {
     emailInputField.sendKeys(email)
@@ -78,6 +78,6 @@ class RegisterPage(implicit driver: WebDriver) extends UserFormPage with ThirdPa
   }
 
   def registrationComplete: Boolean = {
-    completeRegistrationButton.isDisplayed
+    dataLinkElementExists(registerCompleteText)
   }
 }
