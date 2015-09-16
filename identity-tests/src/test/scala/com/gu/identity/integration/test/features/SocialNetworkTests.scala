@@ -6,7 +6,7 @@ import com.gu.identity.integration.test.steps.{SignInSteps, SocialNetworkSteps, 
 import com.gu.identity.integration.test.tags.{CoreTest, OptionalTest, SocialTest}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
 import com.gu.integration.test.steps.BaseSteps
-import org.openqa.selenium.{JavascriptExecutor, WebDriver}
+import org.openqa.selenium.WebDriver
 import org.scalatest.Tag
 
 
@@ -146,7 +146,6 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
       implicit driver: WebDriver =>
         BaseSteps().goToStartPage()
         SignInSteps().signInUsingGoogle()
-        driver.asInstanceOf[JavascriptExecutor].executeScript("javascript:window.scrollTop") //chrome browser flicks user down to content after signing in with Google+ so scroll back to top
         val editAccountDetailsPage = UserSteps().goToEditProfilePage(new ContainerWithSigninModulePage())
         SocialNetworkSteps().checkUserGotReAuthenticationMessage(editAccountDetailsPage)
         val googleConfirmPasswordDialog = editAccountDetailsPage.clickConfirmWithGoogleButton
