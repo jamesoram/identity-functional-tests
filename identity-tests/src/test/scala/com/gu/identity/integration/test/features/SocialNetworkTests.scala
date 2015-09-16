@@ -3,7 +3,7 @@ package com.gu.identity.integration.test.features
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
 import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, FrontPage}
 import com.gu.identity.integration.test.steps.{SignInSteps, SocialNetworkSteps, UserSteps}
-import com.gu.identity.integration.test.tags.{CoreTest, OptionalTest, SocialTest}
+import com.gu.identity.integration.test.tags.{Unstable, CoreTest, OptionalTest, SocialTest}
 import com.gu.identity.integration.test.util.facebook.FacebookTestUser
 import com.gu.integration.test.steps.BaseSteps
 import org.openqa.selenium.{JavascriptExecutor, WebDriver}
@@ -91,7 +91,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
         SocialNetworkSteps().checkUserIsOnFacebook()
     }
 
-    scenarioFacebook("SN6: Facebook user can change email on profile and still sign in", OptionalTest, SocialTest) {
+    scenarioFacebook("SN6: Facebook user can change email on profile and still sign in", OptionalTest, SocialTest, Unstable) {
       implicit driver: WebDriver => implicit facebookUser: FacebookTestUser =>
         val newEmail = System.currentTimeMillis() + "changed@changed.com"
         val oldEmail: String = facebookUser.email.get
@@ -142,7 +142,7 @@ class SocialNetworkTests extends IdentitySeleniumTestSuite {
   }
   feature("Registration and sign-in using Google") {
 
-    scenarioWeb("SN8: should be asked to re-authenticate when editing profile after logging in with Google", OptionalTest, SocialTest) {
+    scenarioWeb("SN8: should be asked to re-authenticate when editing profile after logging in with Google", OptionalTest, SocialTest, Unstable) {
       implicit driver: WebDriver =>
         BaseSteps().goToStartPage()
         SignInSteps().signInUsingGoogle()
