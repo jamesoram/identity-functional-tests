@@ -3,7 +3,6 @@ package com.gu.identity.integration.test.steps
 import com.gu.automation.support.TestLogging
 import com.gu.identity.integration.test.pages.RegisterPage
 import com.gu.identity.integration.test.util.{FormError, User}
-import com.gu.integration.test.util.PageLoader._
 import org.openqa.selenium.WebDriver
 import org.scalatest.Matchers
 
@@ -31,14 +30,10 @@ case class RegisterSteps(implicit driver: WebDriver) extends TestLogging with Ma
 
     registerPage.clickCreateUser()
 
-    waitForPageToLoad
-
-    val userFormErrors = registerPage.getAllValidationFormErrors
-
-    if (userFormErrors.nonEmpty) {
-      Left(userFormErrors)
-    } else {
+    if (registerPage.registrationComplete) { //finding the errors takes time so only do so if the button is not visible
       Right(user)
+    } else {
+      Left(registerPage.getAllValidationFormErrors)
     }
   }
 

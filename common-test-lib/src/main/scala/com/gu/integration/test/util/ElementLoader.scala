@@ -1,5 +1,7 @@
 package com.gu.integration.test.util
 
+import java.lang
+
 import com.gu.automation.support.TestLogging
 import org.openqa.selenium.support.ui.ExpectedConditions._
 import org.openqa.selenium.support.ui.{ExpectedCondition, WebDriverWait}
@@ -18,6 +20,10 @@ object ElementLoader extends TestLogging {
 
   def displayed(elementsToCheck: List[WebElement]): List[WebElement] = {
     elementsToCheck.filter(element => element.isDisplayed)
+  }
+
+  def dataLinkElementExists(elementToCheck : String) (implicit driver: WebDriver): Boolean =  {
+    driver.findElements(byDataLinkAttributeName(elementToCheck)).size() > 0
   }
 
   /**
@@ -104,11 +110,12 @@ object ElementLoader extends TestLogging {
     val result = driver.asInstanceOf[JavascriptExecutor].
       executeScript("return arguments[0].complete && typeof arguments[0].naturalWidth != \"undefined\" && arguments[0].naturalWidth > 0",
         imageElement)
-    logger.info(s"isImageDisplayed result: ${result}")
-    if (result.isInstanceOf[java.lang.Boolean]) {
-      result.asInstanceOf[java.lang.Boolean]
-    } else {
-      false
+    logger.info(s"isImageDisplayed result: $result")
+    result match {
+      case boolean: lang.Boolean =>
+        Boolean2boolean(boolean)
+      case _ =>
+        false
     }
   }
 
@@ -117,13 +124,13 @@ object ElementLoader extends TestLogging {
    */
   def displayedIFrames(searchContext: SearchContext)(implicit driver: WebDriver): List[WebElement] = {
     searchContext.findElements(By.cssSelector("iframe")).asScala.toList.filter(
-      element => waitUntil(visibilityOf(element)) && element.isDisplayed())
+      element => waitUntil(visibilityOf(element)) && element.isDisplayed)
   }
 
   def firstDisplayedIframe(rootElement: WebElement)(implicit driver: WebDriver): WebElement = {
     val iframeElements = displayedIFrames(rootElement)
     if (iframeElements.size != 1) {
-      throw new RuntimeException(s"Unexpected number of iframes ${iframeElements.size} inside element: ${rootElement}")
+      throw new RuntimeException(s"Unexpected number of iframes ${iframeElements.size} inside element: $rootElement")
     }
     iframeElements.last
   }
@@ -136,10 +143,9 @@ object ElementLoader extends TestLogging {
     try {
       new WebDriverWait(driver, timeoutInSeconds).until(expectedCondition)
     } catch {
-      case e: WebDriverException => {
-        logger.info(s"Element not displayed after waiting: ${e.getMessage()}")
-        false
-      }
+      case e: WebDriverException =>
+        logger.info(s"Element not displayed after waiting: ${e.getMessage}")
+        return false
     }
     true
   }
