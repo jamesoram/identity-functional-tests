@@ -85,7 +85,7 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       UserSteps().checkUserGotPasswordResetSentMessage(passwordResetSentPage)
     }
 
-    scenarioWeb("U7: should be able to go back to return URL after registration") { implicit driver: WebDriver =>
+    scenarioWeb("U7: should be able to go back to return URL after registration", OptionalTest) { implicit driver: WebDriver =>
       val subPath = "/sport"
       val expectedReturnUrl = PageLoader.turnOfPopups(PageLoader.frontsBaseUrl + subPath)
       UserSteps().createRandomBasicUser(Some(subPath)).right.value
