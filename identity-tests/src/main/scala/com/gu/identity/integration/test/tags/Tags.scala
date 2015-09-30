@@ -14,9 +14,6 @@ import org.scalatest.Tag
     tests will also be run
   */
 
-  //test intermittently fails, e.g. tests running against 3rd party sites are more reliant on stable connections
-  object Unstable extends Tag("Unstable")
-
   //test is essential and the site will not function without this feature
   object CoreTest extends Tag("CoreTest")
 
