@@ -1,10 +1,9 @@
 package com.gu.identity.integration.test.pages
 
-import com.gu.integration.test.pages.common.ParentPage
 import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
 import org.openqa.selenium.{WebElement, By, WebDriver}
 
-class FrontPage(implicit driver: WebDriver) extends ParentPage {
+class FrontPage(implicit driver: WebDriver) extends ContainerWithSigninModulePage {
 
   private def getSiteMessage(): Option[WebElement] =  {
     try {
