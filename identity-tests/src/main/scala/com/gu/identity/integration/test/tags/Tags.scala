@@ -23,3 +23,5 @@ import org.scalatest.Tag
   //test is specifically testing the interaction with external social applications
   object SocialTest extends Tag("SocialTest")
 
+  //test is specifically testing the basic application functionality.
+  object SmokeTest extends Tag("SmokeTest")

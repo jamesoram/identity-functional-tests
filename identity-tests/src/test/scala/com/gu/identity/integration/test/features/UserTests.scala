@@ -3,7 +3,7 @@ package com.gu.identity.integration.test.features
 import com.gu.identity.integration.test.IdentitySeleniumTestSuite
 import com.gu.identity.integration.test.pages.{EmailVerificationPage, ContainerWithSigninModulePage, EditAccountDetailsModule}
 import com.gu.identity.integration.test.steps.{SignInSteps, UserSteps}
-import com.gu.identity.integration.test.tags.{CoreTest, OptionalTest}
+import com.gu.identity.integration.test.tags.{SmokeTest, CoreTest, OptionalTest}
 import com.gu.identity.integration.test.util.{FormError, User}
 import com.gu.identity.integration.test.util.User._
 import com.gu.integration.test.steps.BaseSteps
@@ -22,7 +22,7 @@ class UserTests extends IdentitySeleniumTestSuite with EitherValues {
       validationErrors should contain(FormError("This username has already been taken"))
     }
 
-    scenarioWeb("U2: should be able to change email address", CoreTest) { implicit driver: WebDriver =>
+    scenarioWeb("U2: should be able to change email address", CoreTest, SmokeTest) { implicit driver: WebDriver =>
       val userBeforeChange: User = UserSteps().createRandomBasicUser().right.value
       val editAccountDetailsModule = UserSteps().checkUserIsLoggedInAndGoToAccountDetails(userBeforeChange)
 
