@@ -93,7 +93,7 @@ object FacebookTestUserService {
       Some(createdFacebookTestUser.id),
       Some(createdFacebookTestUser.email),
       Some(createdFacebookTestUser.login_url),
-      true
+      created = true
     )
 
     mergedFacebookTestUser

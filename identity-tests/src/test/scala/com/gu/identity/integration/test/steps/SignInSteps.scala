@@ -1,7 +1,7 @@
 package com.gu.identity.integration.test.steps
 
-import com.gu.automation.support.{Config, TestLogging}
-import com.gu.identity.integration.test.pages.{ContainerWithSigninModulePage, SignInPage}
+import com.gu.automation.support.{Config, CookieManager, TestLogging}
+import com.gu.identity.integration.test.pages._
 import com.gu.identity.integration.test.util.User
 import com.gu.integration.test.steps.BaseSteps
 import com.gu.integration.test.util.CookieUtil._
@@ -15,6 +15,7 @@ import org.scalatest.Matchers
 case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matchers {
   private val LoginCookie: String = "GU_U"
   private val SecureLoginCookie: String = "SC_GU_U"
+  private val SignOutCookie: String = "GU_SO"
 
   def clickSignInLink(): SignInPage = {
     logger.step("Clicking sign in link")
@@ -25,7 +26,7 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     signInWith(Config().getLoginEmail(), Config().getLoginPassword())
   }
 
-  def signInWith(email:String, pwd:String) = {
+  def signInWith(email: String, pwd: String) = {
     logger.step("Signing in using credentials")
     val signInPage = SignInSteps().clickSignInLink()
     signInPage.enterEmail(email)
@@ -42,8 +43,8 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
 
   def checkUserIsLoggedIn(expectedLoginName: String) = {
     logger.step(s"Checking that user is logged in")
-    val loginName = new ContainerWithSigninModulePage().signInModule().signInName.getText
-    loginName.contains(expectedLoginName) should be(true)
+    val loginName = new ContainerWithSigninModulePage().signInModule().getSignInName
+    loginName should include(expectedLoginName)
 
     val loginCookie = getCookie(LoginCookie)
     loginCookie.getValue should not be empty
@@ -64,6 +65,15 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
     faceBookSignInPage.loginInButton.click()
   }
 
+  def clickSignInWithFacebook(emailAllowed: Boolean = true): Either[FaceBookSignInPage, RegisterPage] = {
+    //user sent down either path if the user has allowed the email or not
+    if (emailAllowed) {
+      Left(new SignInPage().clickFaceBookSignInButton())
+    } else {
+      Right(new SignInPage().clickSignInWithFaceBookNoEmail)
+    }
+  }
+
   def signInUsingNewFaceBook() = {
     logger.step(s"Signing in using FaceBook")
     val signInPage = SignInSteps().clickSignInLink()
@@ -76,10 +86,11 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
   def signInUsingGoogle() = {
     logger.step(s"Signing in using Google")
     val signInPage = SignInSteps().clickSignInLink()
-    val googleSignInPage = signInPage.clickGoogleSignInButton()
+    val googleSignInPage = signInPage.clickGoogleSignInButton
     googleSignInPage.enterEmail(Config().getUserValue("googleEmail"))
+    googleSignInPage.nextButton.click()
     googleSignInPage.enterPwd(Config().getUserValue("googlePwd"))
-    googleSignInPage.loginInButton.click()
+    googleSignInPage.clickLogInButton
   }
 
   def signOut(pageWithSignInModule: ContainerWithSigninModulePage) = {
@@ -90,18 +101,27 @@ case class SignInSteps(implicit driver: WebDriver) extends TestLogging with Matc
   def checkUserIsNotLoggedIn(expectedLoginName: String) = {
     logger.step(s"Checking that user is not logged in")
     val loginName = new ContainerWithSigninModulePage().signInModule().signInName.getText
-    loginName should not be(expectedLoginName)
+    loginName should not be expectedLoginName
 
     val loginCookie = getCookie(LoginCookie)
-    loginCookie should be (null)
+    loginCookie should be(null)
   }
 
   def clearLoginCookies() = {
-    removeCookie(LoginCookie)
-    removeCookie(SecureLoginCookie)
+    CookieManager.removeCookie(LoginCookie)
+    CookieManager.removeCookie(SecureLoginCookie)
+  }
+
+  def clearSignOutCookie() = {
+    CookieManager.removeCookie(SignOutCookie)
+  }
+
+  def setSignOutCookieWithTime(time: Long) = {
+    clearSignOutCookie()
+    CookieManager.addCookie(SignOutCookie, time.toString)
   }
 
   def checkThatLoginCookieExists() = {
-    getCookie(LoginCookie) should not be (null)
+    getCookie(LoginCookie) should not be null
   }
 }

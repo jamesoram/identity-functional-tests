@@ -1,5 +1,7 @@
 package com.gu.integration.test.util
 
+import java.lang
+
 import com.gu.automation.support.TestLogging
 import org.openqa.selenium.support.ui.ExpectedConditions._
 import org.openqa.selenium.support.ui.{ExpectedCondition, WebDriverWait}
@@ -10,13 +12,18 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 object ElementLoader extends TestLogging {
 
   val TestAttributeName = "data-test-id"
+  val DataLinkAttributeName = "data-link-name"
 
   def notDisplayed(elementsToCheck: List[WebElement]): List[WebElement] = {
-    elementsToCheck.filter(element => !element.isDisplayed())
+    elementsToCheck.filter(element => !element.isDisplayed)
   }
 
   def displayed(elementsToCheck: List[WebElement]): List[WebElement] = {
-    elementsToCheck.filter(element => element.isDisplayed())
+    elementsToCheck.filter(element => element.isDisplayed)
+  }
+
+  def dataLinkElementExists(elementToCheck : String) (implicit driver: WebDriver): Boolean =  {
+    driver.findElements(byDataLinkAttributeName(elementToCheck)).size() > 0
   }
 
   /**
@@ -25,6 +32,10 @@ object ElementLoader extends TestLogging {
    */
   def findByTestAttribute(testAttributeValue: String, contextElement: Option[SearchContext] = None)(implicit driver: WebDriver): WebElement = {
     contextElement.getOrElse(driver).findElement(byTestAttributeId(testAttributeValue))
+  }
+
+  def findByDataLinkAttribute(testAttributeValue: String, contextElement: Option[SearchContext] = None)(implicit driver: WebDriver): WebElement = {
+    contextElement.getOrElse(driver).findElement(byDataLinkAttributeName(testAttributeValue))
   }
 
   /**
@@ -37,6 +48,10 @@ object ElementLoader extends TestLogging {
 
   private def byTestAttributeId(testAttributeValue: String): org.openqa.selenium.By = {
     By.cssSelector(s"[$TestAttributeName=$testAttributeValue]")
+  }
+
+  private def byDataLinkAttributeName(name: String): org.openqa.selenium.By = {
+    By.cssSelector(s"[$DataLinkAttributeName=$name]")
   }
 
   /**
@@ -55,7 +70,7 @@ object ElementLoader extends TestLogging {
    */
   def displayedElements(elements: List[WebElement], timeoutInSeconds: Int = 3, maxElements: Int = Int.MaxValue)(implicit driver: WebDriver): List[WebElement] = {
     elements.view
-      .filter(element => waitUntil(visibilityOf(element), timeoutInSeconds) && element.isDisplayed())
+      .filter(element => waitUntil(visibilityOf(element), timeoutInSeconds) && element.isDisplayed)
       .take(maxElements)
       .toList
   }
@@ -95,11 +110,12 @@ object ElementLoader extends TestLogging {
     val result = driver.asInstanceOf[JavascriptExecutor].
       executeScript("return arguments[0].complete && typeof arguments[0].naturalWidth != \"undefined\" && arguments[0].naturalWidth > 0",
         imageElement)
-    logger.info(s"isImageDisplayed result: ${result}")
-    if (result.isInstanceOf[java.lang.Boolean]) {
-      result.asInstanceOf[java.lang.Boolean]
-    } else {
-      false
+    logger.info(s"isImageDisplayed result: $result")
+    result match {
+      case boolean: lang.Boolean =>
+        Boolean2boolean(boolean)
+      case _ =>
+        false
     }
   }
 
@@ -108,13 +124,13 @@ object ElementLoader extends TestLogging {
    */
   def displayedIFrames(searchContext: SearchContext)(implicit driver: WebDriver): List[WebElement] = {
     searchContext.findElements(By.cssSelector("iframe")).asScala.toList.filter(
-      element => waitUntil(visibilityOf(element)) && element.isDisplayed())
+      element => waitUntil(visibilityOf(element)) && element.isDisplayed)
   }
 
   def firstDisplayedIframe(rootElement: WebElement)(implicit driver: WebDriver): WebElement = {
     val iframeElements = displayedIFrames(rootElement)
     if (iframeElements.size != 1) {
-      throw new RuntimeException(s"Unexpected number of iframes ${iframeElements.size} inside element: ${rootElement}")
+      throw new RuntimeException(s"Unexpected number of iframes ${iframeElements.size} inside element: $rootElement")
     }
     iframeElements.last
   }
@@ -127,10 +143,9 @@ object ElementLoader extends TestLogging {
     try {
       new WebDriverWait(driver, timeoutInSeconds).until(expectedCondition)
     } catch {
-      case e: WebDriverException => {
-        logger.info(s"Element not displayed after waiting: ${e.getMessage()}")
-        false
-      }
+      case e: WebDriverException =>
+        logger.info(s"Element not displayed after waiting: ${e.getMessage}")
+        return false
     }
     true
   }

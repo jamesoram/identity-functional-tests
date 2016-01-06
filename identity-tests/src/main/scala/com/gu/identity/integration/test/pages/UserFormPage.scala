@@ -12,7 +12,7 @@ class UserFormPage(implicit driver: WebDriver) extends ParentPage {
 
   private def validationErrors: List[WebElement] = findAllByTestAttribute("form-field-error")
 
-  def getAllValidationFormErrors(): List[FormError] = {
+  def getAllValidationFormErrors: List[FormError] = {
     val errorElements = displayedElements(validationErrors, 1)
     errorElements.map(webElement => FormError(webElement.getText))
   }
